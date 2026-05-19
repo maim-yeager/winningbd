@@ -4366,16 +4366,31 @@ textarea,
     window.googleSignUp = window.googleSignIn; // Same flow for sign up
 
     // ========== SPLASH SCREEN CONTROLLER ==========
-    window.onload = function() {
-        // স্প্ল্যাশ স্ক্রিন 3.5 সেকেন্ড দেখাবে
-        setTimeout(() => {
-            document.getElementById('splash-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                splashFinished = true;  // this triggers the auth state handler
-            }, 500);
+    (function() {
+        // Splash screen dismiss after 3.5 seconds
+        const splashTimer = setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    splashFinished = true;
+                }, 500);
+            }
         }, 3500);
-    };
+
+        // Fallback: force hide splash after 10s if something went wrong
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash && splash.style.display !== 'none') {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    splashFinished = true;
+                }, 500);
+            }
+        }, 10000);
+    })();
 
     // ========== AUTO REDIRECT - FIXED: SPLASH ALWAYS FIRST, THEN HOME OR LOGIN ==========
     onAuthStateChanged(auth, (user) => {
