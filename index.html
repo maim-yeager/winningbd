@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="google-site-verification" content="swNYPGQ61KNIKoQlPxQ1TsEVSjK93EKK513LmWz8zAM" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>WINNING BD</title>
+
+<meta name="description" content="Winning BD official website" />
+
+<meta name="keywords" content="Winning BD,free fire,ludo,pubg turnament" />
+
+<meta name="author" content="Maim islam" />
+
+<meta name="robots" content="index, follow" />
     
     <!-- Security Meta Tags -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -2462,366 +2471,6 @@ textarea,
         text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
     }
 }
-        /* ===== LIVE PULSE ANIMATION ===== */
-        .live-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: linear-gradient(135deg, #ff4444, #cc0000);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 4px 10px;
-            border-radius: 20px;
-            letter-spacing: 1px;
-            box-shadow: 0 2px 8px rgba(255,68,68,0.4);
-            animation: livePulse 1.5s ease-in-out infinite;
-        }
-        .live-badge::before {
-            content: '';
-            width: 7px; height: 7px;
-            background: white;
-            border-radius: 50%;
-            animation: liveDot 1.5s ease-in-out infinite;
-        }
-        @keyframes livePulse {
-            0%, 100% { box-shadow: 0 2px 8px rgba(255,68,68,0.4); }
-            50% { box-shadow: 0 2px 20px rgba(255,68,68,0.8), 0 0 30px rgba(255,68,68,0.3); }
-        }
-        @keyframes liveDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
-        }
-        .match-card.ongoing {
-            border: 2px solid rgba(255,68,68,0.3);
-            background: linear-gradient(145deg, #e0e5ec, #f5e8e8);
-        }
-        .match-card.ongoing::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: linear-gradient(135deg, rgba(255,68,68,0.05), transparent);
-            pointer-events: none;
-        }
-
-        /* ===== SKELETON LOADER SMOOTH ===== */
-        .skeleton {
-            background: linear-gradient(90deg, #d1d9e6 25%, #e8ecf1 50%, #d1d9e6 75%);
-            background-size: 400% 100%;
-            animation: skeletonShimmer 1.6s ease-in-out infinite;
-            border-radius: 10px;
-        }
-        @keyframes skeletonShimmer {
-            0% { background-position: 100% 50%; }
-            100% { background-position: -100% 50%; }
-        }
-        .skeleton-card {
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin: 15px 20px;
-            box-shadow: var(--shadow-neumorphic-sm);
-            overflow: hidden;
-        }
-        .skeleton-line { height: 14px; margin-bottom: 10px; }
-        .skeleton-line.short { width: 40%; }
-        .skeleton-line.medium { width: 70%; }
-        .skeleton-line.full { width: 100%; }
-        .skeleton-avatar { width: 60px; height: 60px; border-radius: 50%; }
-        .skeleton-img { width: 100%; height: 140px; border-radius: var(--radius-md); margin-bottom: 12px; }
-
-        /* ===== SEARCH / FILTER BAR ===== */
-        .search-filter-bar {
-            padding: 15px 20px 5px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .search-input-wrapper {
-            flex: 1;
-            position: relative;
-        }
-        .search-input-wrapper i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-        .search-input {
-            width: 100%;
-            padding: 12px 14px 12px 38px;
-            background: var(--bg-primary);
-            border: none;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-neumorphic-inset-sm);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            outline: none;
-        }
-        .search-input::placeholder { color: var(--text-light); }
-        .filter-dropdown {
-            padding: 12px 14px;
-            background: var(--bg-primary);
-            border: none;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-neumorphic-sm);
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            outline: none;
-            cursor: pointer;
-            min-width: 90px;
-        }
-
-        /* ===== EMPTY STATE ===== */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 30px;
-            text-align: center;
-            animation: fadeInUp 0.6s ease;
-        }
-        .empty-state-icon {
-            width: 100px; height: 100px;
-            background: var(--bg-primary);
-            border-radius: 50%;
-            box-shadow: var(--shadow-neumorphic);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            font-size: 2.5rem;
-        }
-        .empty-state h3 {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-        }
-        .empty-state p {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            font-weight: 600;
-            line-height: 1.6;
-        }
-
-        /* ===== BOTTOM NAV NOTIFICATION BADGE ===== */
-        .tab-icon-box { position: relative; }
-        .nav-badge {
-            position: absolute;
-            top: -5px; right: -5px;
-            background: var(--danger);
-            color: white;
-            font-size: 0.6rem;
-            font-weight: 900;
-            min-width: 18px; height: 18px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--bg-primary);
-            animation: badgePop 0.3s var(--transition-bounce);
-            z-index: 10;
-        }
-        .nav-badge.show { display: flex; }
-        @keyframes badgePop {
-            from { transform: scale(0); }
-            to { transform: scale(1); }
-        }
-
-        /* ===== AVATAR UPLOAD ===== */
-        .avatar-upload-wrapper {
-            position: relative;
-            width: 90px; height: 90px;
-            margin: 0 auto 15px;
-            cursor: pointer;
-        }
-        .avatar-upload-wrapper img {
-            width: 90px; height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: var(--shadow-neumorphic-sm);
-            border: 3px solid white;
-        }
-        .avatar-edit-btn {
-            position: absolute;
-            bottom: 0; right: 0;
-            width: 28px; height: 28px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.75rem;
-            box-shadow: 0 2px 8px rgba(25,118,210,0.4);
-        }
-        #avatar-file-input { display: none; }
-
-        /* ===== SHARE MATCH BUTTONS ===== */
-        .share-btn-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .share-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-weight: 800;
-            font-size: 0.8rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        .share-btn:active { transform: scale(0.96); }
-        .share-btn.whatsapp { background: #25D366; color: white; }
-        .share-btn.telegram { background: #0088cc; color: white; }
-        .share-btn.copy { background: var(--bg-primary); color: var(--text-dark); box-shadow: var(--shadow-neumorphic-sm); }
-
-        /* ===== REFERRAL TRACKING GRAPH ===== */
-        .refer-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            margin: 15px 0;
-        }
-        .refer-stat-box {
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
-            padding: 15px 10px;
-            text-align: center;
-            box-shadow: var(--shadow-neumorphic-sm);
-        }
-        .refer-stat-num {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--primary);
-        }
-        .refer-stat-label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-top: 4px;
-        }
-        .refer-graph-bar-wrap {
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            box-shadow: var(--shadow-neumorphic-inset-sm);
-            margin: 15px 0;
-        }
-        .refer-graph-title {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--text-medium);
-            margin-bottom: 15px;
-        }
-        .refer-bar-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .refer-bar-label { font-size: 0.75rem; font-weight: 700; color: var(--text-light); width: 30px; }
-        .refer-bar-track { flex: 1; height: 10px; background: var(--dark-shadow); border-radius: 10px; overflow: hidden; }
-        .refer-bar-fill { height: 100%; background: var(--primary-gradient); border-radius: 10px; transition: width 1s ease; }
-        .refer-bar-count { font-size: 0.75rem; font-weight: 800; color: var(--text-dark); width: 20px; text-align: right; }
-        .refer-friend-list { margin-top: 15px; }
-        .refer-friend-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-neumorphic-sm);
-            margin-bottom: 10px;
-        }
-        .refer-friend-avatar {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 900; font-size: 1rem;
-            flex-shrink: 0;
-        }
-        .refer-friend-name { font-weight: 800; font-size: 0.9rem; color: var(--text-dark); }
-        .refer-friend-date { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
-        .refer-friend-bonus { margin-left: auto; font-weight: 900; color: var(--success); font-size: 0.85rem; }
-
-        /* ===== FCM NOTIFICATION PERMISSION BANNER ===== */
-        .notif-permission-banner {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            border-radius: var(--radius-md);
-            margin: 15px 20px 0;
-            box-shadow: 0 4px 16px rgba(25,118,210,0.3);
-            animation: slideDown 0.4s ease;
-        }
-        @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .notif-permission-banner p { font-size: 0.85rem; font-weight: 700; flex: 1; }
-        .notif-allow-btn {
-            background: white;
-            color: var(--primary);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 900;
-            font-size: 0.8rem;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .notif-dismiss-btn {
-            background: none;
-            border: none;
-            color: rgba(255,255,255,0.7);
-            cursor: pointer;
-            font-size: 1.1rem;
-            padding: 4px;
-        }
-
-        /* ===== OTP VERIFICATION ===== */
-        .otp-container {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .otp-input {
-            width: 48px; height: 56px;
-            text-align: center;
-            font-size: 1.4rem;
-            font-weight: 900;
-            border: none;
-            border-radius: var(--radius-md);
-            background: var(--bg-primary);
-            box-shadow: var(--shadow-neumorphic-inset-sm);
-            color: var(--text-dark);
-            outline: none;
-        }
-        .otp-input:focus { box-shadow: var(--shadow-neumorphic-inset), 0 0 0 2px var(--primary); }
-        .otp-timer { text-align: center; font-size: 0.85rem; color: var(--text-light); font-weight: 700; margin-bottom: 15px; }
-        .otp-resend { text-align: center; color: var(--primary); font-weight: 800; cursor: pointer; font-size: 0.9rem; }
-        .otp-resend.disabled { color: var(--text-light); pointer-events: none; }
     </style>
 </head>
 <body>
@@ -2947,22 +2596,10 @@ textarea,
 
     <!-- ========== PROFILE SECTION ========== -->
     <section id="tab-profile-view" class="app-section">
-        <!-- FCM Notification Permission Banner -->
-        <div id="notif-permission-banner" class="notif-permission-banner" style="display:none;">
-            <i class="fas fa-bell" style="font-size:1.2rem;"></i>
-            <p>নতুন match এর notification পেতে allow করুন</p>
-            <button class="notif-allow-btn" onclick="requestNotifPermission()">Allow</button>
-            <button class="notif-dismiss-btn" onclick="dismissNotifBanner()">✕</button>
-        </div>
-
         <div class="profile-header-bg">
-            <!-- Avatar with Upload -->
-            <div class="avatar-upload-wrapper" onclick="document.getElementById('avatar-file-input').click()">
+            <div class="profile-avatar-box">
                 <img id="profile-avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" class="fade-image">
-                <div class="avatar-edit-btn"><i class="fas fa-camera"></i></div>
             </div>
-            <input type="file" id="avatar-file-input" accept="image/*" onchange="uploadAvatar(this)">
-
             <h3 id="profile-name">Guest User</h3>
             <p id="profile-email">Please login to continue</p>
             
@@ -3032,20 +2669,6 @@ textarea,
         <div class="back-nav" onclick="showSection('home')">
             <i class="fas fa-arrow-left"></i>
             <span>Back to Home</span>
-        </div>
-
-        <!-- SEARCH & FILTER BAR -->
-        <div class="search-filter-bar">
-            <div class="search-input-wrapper">
-                <i class="fas fa-search"></i>
-                <input type="text" class="search-input" id="match-search-input" placeholder="ম্যাচ খুঁজুন..." oninput="searchMatches(this.value)">
-            </div>
-            <select class="filter-dropdown" id="match-filter-type" onchange="filterMatchByType(this.value)">
-                <option value="all">সব</option>
-                <option value="Solo">Solo</option>
-                <option value="Duo">Duo</option>
-                <option value="Squad">Squad</option>
-            </select>
         </div>
         
         <div class="match-tabs-container">
@@ -3309,7 +2932,7 @@ textarea,
     </section>
 
     <!-- ========== REFER & EARN VIEW ========== -->
-        <section id="refer-view" class="app-section">
+    <section id="refer-view" class="app-section">
         <div style="padding: 20px;">
             <div class="back-nav" onclick="navigateBack('profile')" style="margin: 0 0 20px 0;">
                 <i class="fas fa-arrow-left"></i>
@@ -3322,56 +2945,70 @@ textarea,
                 </div>
                 <h2 style="color: var(--primary); font-weight: 900; margin-bottom: 10px;">Refer Your Friends</h2>
                 <p style="color: var(--text-medium); margin-bottom: 30px;">Earn extra money by inviting your friends!</p>
+                
                 <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px;">Your Referral Code</div>
                 <div id="refer-code-display" class="refer-code-display">LOADING</div>
-                <button class="primary-btn" onclick="copyReferralCode()"><i class="fas fa-copy"></i> TAP TO COPY</button>
-                <div class="share-btn-row" style="margin-top: 15px;">
-                    <button class="share-btn whatsapp" onclick="shareReferralTo('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-                    <button class="share-btn telegram" onclick="shareReferralTo('telegram')"><i class="fab fa-telegram"></i> Telegram</button>
-                    <button class="share-btn copy" onclick="shareReferral()"><i class="fas fa-share-alt"></i> More</button>
+                
+                <button class="primary-btn" onclick="copyReferralCode()">
+                    <i class="fas fa-copy"></i> TAP TO COPY
+                </button>
+                
+                <div class="refer-share-card" onclick="shareReferral()">
+                    <span style="font-weight: 900; font-size: 1.1rem;">শেয়ার করুন</span>
+                    <i class="fas fa-share-alt"></i>
                 </div>
             </div>
-
-            <div style="margin-top: 20px;">
-                <h4 style="font-weight: 900; margin-bottom: 15px; color: var(--text-dark);">&#128202; আমার Referral Stats</h4>
-                <div class="refer-stats-grid">
-                    <div class="refer-stat-box"><div class="refer-stat-num" id="refer-total-count">0</div><div class="refer-stat-label">মোট Refer</div></div>
-                    <div class="refer-stat-box"><div class="refer-stat-num" id="refer-total-earned" style="color:var(--success);">৳0</div><div class="refer-stat-label">মোট আয়</div></div>
-                    <div class="refer-stat-box"><div class="refer-stat-num" id="refer-this-month" style="color:var(--secondary);">0</div><div class="refer-stat-label">এই মাসে</div></div>
+            
+            <div class="glassmorphic" style="margin-top: 20px; background: var(--secondary-gradient); color: white;">
+                <h3 style="font-weight: 900; margin-bottom: 20px; text-align: center;">⬇️ অ্যাপ ডাউনলোড করুন</h3>
+                <div style="display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://winningbd.app/download" target="_blank" style="background: white; padding: 14px 30px; border-radius: 50px; color: var(--secondary-dark); font-weight: 900; text-decoration: none;">
+                        <i class="fas fa-download"></i> ডাউনলোড
+                    </a>
+                    <button class="btn-copy-v2" onclick="copyText('https://winningbd.app/download')" style="background: white; color: var(--text-dark);">কপি লিংক</button>
                 </div>
-                <div class="refer-graph-bar-wrap">
-                    <div class="refer-graph-title">&#128197; সাপ্তাহিক Referral</div>
-                    <div id="refer-weekly-graph">
-                        <div class="refer-bar-row"><span class="refer-bar-label">Mon</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                        <div class="refer-bar-row"><span class="refer-bar-label">Tue</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                        <div class="refer-bar-row"><span class="refer-bar-label">Wed</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                        <div class="refer-bar-row"><span class="refer-bar-label">Thu</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                        <div class="refer-bar-row"><span class="refer-bar-label">Fri</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                        <div class="refer-bar-row"><span class="refer-bar-label">Sat</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                        <div class="refer-bar-row"><span class="refer-bar-label">Sun</span><div class="refer-bar-track"><div class="refer-bar-fill" style="width:0%"></div></div><span class="refer-bar-count">0</span></div>
-                    </div>
-                </div>
-                <h4 style="font-weight: 900; margin-bottom: 12px; color: var(--text-dark);">&#128101; Referred Friends</h4>
-                <div id="refer-friend-list" class="refer-friend-list">
-                    <div class="empty-state" style="padding: 30px;">
-                        <div class="empty-state-icon">&#128101;</div>
-                        <h3>এখনো কাউকে রেফার করোনি</h3>
-                        <p>বন্ধুদের সাথে code শেয়ার করো এবং টাকা আয় করো!</p>
-                    </div>
-                </div>
+                <p style="margin-top: 15px; font-size: 0.8rem;">ডাউনলোড লিংক: https://winningbd.app/download</p>
             </div>
-
+            
             <div id="update-banner-container" style="display: none;" class="update-banner">
                 <span><i class="fas fa-sync-alt"></i> নতুন ভার্সন উপলব্ধ</span>
                 <button id="update-now-btn">আপডেট</button>
             </div>
-
-            <div style="margin-top: 20px;">
+            
+            <div style="margin-top: 30px;">
                 <h4 style="font-weight: 900; margin-bottom: 20px;">HOW IT WORKS</h4>
-                <div class="refer-step"><div class="step-icon"><i class="fas fa-share-alt"></i></div><div><div style="font-weight:900;color:var(--text-dark);">1. Share Code</div><div style="font-size:0.8rem;color:var(--text-medium);">Share your referral code with friends</div></div></div>
-                <div class="refer-step"><div class="step-icon"><i class="fas fa-user-plus"></i></div><div><div style="font-weight:900;color:var(--text-dark);">2. Friend Joins</div><div style="font-size:0.8rem;color:var(--text-medium);">Friend signs up using your code</div></div></div>
-                <div class="refer-step"><div class="step-icon"><i class="fas fa-gift"></i></div><div><div style="font-weight:900;color:var(--text-dark);">3. Earn Reward</div><div style="font-size:0.8rem;color:var(--text-medium);">You get 10 TK, Friend gets 5 TK</div></div></div>
+                
+                <div class="refer-step">
+                    <div class="step-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 900; color: var(--text-dark);">1. Share Code</div>
+                        <div style="font-size: 0.8rem; color: var(--text-medium);">Share your referral code with friends</div>
+                    </div>
+                </div>
+                
+                <div class="refer-step">
+                    <div class="step-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 900; color: var(--text-dark);">2. Friend Joins</div>
+                        <div style="font-size: 0.8rem; color: var(--text-medium);">Friend signs up using your code</div>
+                    </div>
+                </div>
+                
+                <div class="refer-step">
+                    <div class="step-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 900; color: var(--text-dark);">3. Earn Reward</div>
+                        <div style="font-size: 0.8rem; color: var(--text-medium);">You get 10 TK, Friend gets 5 TK</div>
+                    </div>
+                </div>
             </div>
+            
             <span id="refer-cached-badge" class="cached-badge" style="display: none;">i ডাটা</span>
         </div>
     </section>
@@ -3444,7 +3081,6 @@ textarea,
     <div class="tab-item" onclick="showSection('matches')">
         <div class="tab-icon-box">
             <i class="fas fa-trophy"></i>
-            <span class="nav-badge" id="nav-badge-matches"></span>
         </div>
         <span>Matches</span>
     </div>
@@ -3457,7 +3093,6 @@ textarea,
     <div class="tab-item" onclick="showSection('profile')">
         <div class="tab-icon-box">
             <i class="fas fa-user"></i>
-            <span class="nav-badge" id="nav-badge-notif"></span>
         </div>
         <span>Profile</span>
     </div>
@@ -3924,28 +3559,14 @@ textarea,
     // Fix: Category click now opens matches-view, not mymatches
     window.openCategory = function(categoryId) {
         currentActiveCategory = categoryId;
+        // Show matches-view section
         document.querySelectorAll('.app-section').forEach(el => el.classList.remove('active'));
         document.getElementById('matches-view').classList.add('active');
         document.body.classList.add('sub-page');
+        // Push to history
         navHistory.push({ section: 'matches', subPage: null });
         updateURL('matches', null);
-        // Show skeleton loader first, then load matches
-        const container = document.getElementById('matches-container');
-        if (container) {
-            container.innerHTML = Array(3).fill('').map(() => `
-                <div class="skeleton-card">
-                    <div class="skeleton skeleton-img"></div>
-                    <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
-                        <div style="flex:1;">
-                            <div class="skeleton skeleton-line medium"></div>
-                            <div class="skeleton skeleton-line short" style="margin-top:8px;"></div>
-                        </div>
-                    </div>
-                    <div class="skeleton skeleton-line full"></div>
-                    <div class="skeleton skeleton-line medium" style="margin-top:8px;"></div>
-                </div>`).join('');
-        }
-        setTimeout(() => filterMatchTab('Upcoming'), 400);
+        filterMatchTab('Upcoming');
     };
 
     // ========== NETWORK STATUS BAR ==========
@@ -4349,22 +3970,12 @@ textarea,
                             
                             document.getElementById('profile-name').innerText = currentUserData.name || 'User';
                             document.getElementById('profile-email').innerText = currentUserData.email || '';
-                            // Load avatar if saved
-                            if (currentUserData.avatar) {
-                                document.getElementById('profile-avatar').src = currentUserData.avatar;
-                            }
                             document.getElementById('profile-bal-dep').innerText = depositBal;
                             document.getElementById('profile-bal-win').innerText = winningBal;
                             document.getElementById('wallet-balance-display').innerText = depositBal + winningBal;
                             document.getElementById('deposit-available-wallet').innerText = depositBal;
                             document.getElementById('withdraw-available-wallet').innerText = winningBal;
                             document.getElementById('refer-code-display').innerText = user.uid.substring(0, 6).toUpperCase();
-                            // Load referral tracking
-                            loadReferralStats(user.uid);
-                            // Load avatar if saved
-                            if (currentUserData && currentUserData.avatar) {
-                                document.getElementById('profile-avatar').src = currentUserData.avatar;
-                            }
                         }
                     });
                 }
@@ -4580,7 +4191,20 @@ textarea,
     };
 
     // ========== MATCH FUNCTIONS ==========
-    // filterMatchTab is defined in new features section below
+    window.filterMatchTab = function(status) {
+        currentMatchFilter = status;
+        document.querySelectorAll('.m-tab').forEach(el => el.classList.remove('active'));
+        const tabIndex = status === 'Upcoming' ? 0 : status === 'Ongoing' ? 1 : 2;
+        document.querySelectorAll('.m-tab')[tabIndex].classList.add('active');
+        const container = document.getElementById('matches-container');
+        if (!container) return;
+        let filteredMatches = rawMatches.filter(m => m.categoryId === currentActiveCategory && m.status === status);
+        if (filteredMatches.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-light); font-weight: 700;">No matches found</div>';
+            return;
+        }
+        container.innerHTML = filteredMatches.map(match => createMatchCardHTML(match, status === 'Finished' ? 'result' : 'play')).join('');
+    };
 
     function createMatchCardHTML(match, type) {
         const joined = match.joined || 0;
@@ -4673,15 +4297,6 @@ textarea,
                 ` : ''}
                 <div class="mc-btn-row">
                     ${actions}
-                </div>
-                <!-- Share Buttons -->
-                <div class="share-btn-row" style="margin-top:8px;">
-                    <button class="share-btn whatsapp" onclick="shareMatchTo('whatsapp','${(match.title||'Match').replace(/'/g,"\\'")}',${match.entry||0},${match.total_prize||0})">
-                        <i class="fab fa-whatsapp"></i> শেয়ার
-                    </button>
-                    <button class="share-btn telegram" onclick="shareMatchTo('telegram','${(match.title||'Match').replace(/'/g,"\\'")}',${match.entry||0},${match.total_prize||0})">
-                        <i class="fab fa-telegram"></i> শেয়ার
-                    </button>
                 </div>
                 ${type !== 'result' ? `
                 <div class="mc-footer-timer match-countdown" data-time="${match.timestamp || Date.now() + 86400000}">
@@ -5232,7 +4847,7 @@ setTimeout(() => {
     window.loadHistory = loadHistory;
     window.loadNotifications = loadNotifications;
     window.startSlider = startSlider;
-    // filterMatchTab overridden in new features section
+    window.filterMatchTab = filterMatchTab;
     window.prepJoin = prepJoin;
     window.confirmJoin = confirmJoin;
     window.checkRoom = checkRoom;
@@ -5261,422 +4876,8 @@ setTimeout(() => {
     window.closeModal = closeModal;
     window.showToast = showToast;
 
-    // =====================================================
-    // ✅ MATCH SEARCH & FILTER
-    // =====================================================
-    let allMatchesCache = [];
-    let matchSearchQuery = '';
-    let matchTypeFilter = 'all';
-
-    window.searchMatches = function(query) {
-        matchSearchQuery = query.toLowerCase();
-        renderFilteredMatches();
-    };
-
-    window.filterMatchByType = function(type) {
-        matchTypeFilter = type;
-        renderFilteredMatches();
-    };
-
-    function renderFilteredMatches() {
-        const container = document.getElementById('matches-container');
-        if (!container) return;
-        let filtered = rawMatches.filter(m => m.categoryId === currentActiveCategory && m.status === currentMatchFilter);
-        if (matchSearchQuery) {
-            filtered = filtered.filter(m =>
-                (m.title || '').toLowerCase().includes(matchSearchQuery) ||
-                (m.type || '').toLowerCase().includes(matchSearchQuery) ||
-                (m.map || '').toLowerCase().includes(matchSearchQuery)
-            );
-        }
-        if (matchTypeFilter !== 'all') {
-            filtered = filtered.filter(m => (m.type || '').toLowerCase().includes(matchTypeFilter.toLowerCase()));
-        }
-        if (filtered.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">🔍</div>
-                    <h3>কোনো ম্যাচ পাওয়া যায়নি</h3>
-                    <p>অন্য শব্দ দিয়ে খোঁজো অথবা filter পরিবর্তন করো</p>
-                </div>`;
-            return;
-        }
-        container.innerHTML = filtered.map(m => createMatchCardHTML(m, currentMatchFilter === 'Finished' ? 'result' : 'play')).join('');
-    }
-
-    // =====================================================
-    // ✅ LIVE PULSE & EMPTY STATE IN MATCH CARDS
-    // =====================================================
-    const _origFilter = window.filterMatchTab;
-    window.filterMatchTab = function(status) {
-        currentMatchFilter = status;
-        document.querySelectorAll('.m-tab').forEach(el => el.classList.remove('active'));
-        const tabIndex = status === 'Upcoming' ? 0 : status === 'Ongoing' ? 1 : 2;
-        document.querySelectorAll('.m-tab')[tabIndex]?.classList.add('active');
-        const container = document.getElementById('matches-container');
-        if (!container) return;
-        let filteredMatches = rawMatches.filter(m => m.categoryId === currentActiveCategory && m.status === status);
-        if (filteredMatches.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">${status === 'Upcoming' ? '📅' : status === 'Ongoing' ? '🎮' : '🏆'}</div>
-                    <h3>${status === 'Upcoming' ? 'কোনো আসন্ন ম্যাচ নেই' : status === 'Ongoing' ? 'এখন কোনো চলমান ম্যাচ নেই' : 'কোনো ফলাফল নেই'}</h3>
-                    <p>নতুন ম্যাচ শীঘ্রই আসছে! পরে আবার চেক করো।</p>
-                </div>`;
-            return;
-        }
-        container.innerHTML = filteredMatches.map(m => {
-            let html = createMatchCardHTML(m, status === 'Finished' ? 'result' : 'play');
-            if (status === 'Ongoing') {
-                html = html.replace('<div class="match-card">', '<div class="match-card ongoing">');
-                html = html.replace('class="mc-title">', 'class="mc-title"><span class="live-badge">LIVE</span> ');
-            }
-            return html;
-        }).join('');
-        // Share buttons inject
-        filteredMatches.forEach(m => {
-            const card = container.querySelector(`[data-match-id="${m.id}"]`);
-        });
-    };
-
-    // =====================================================
-    // ✅ SHARE MATCH - WhatsApp & Telegram
-    // =====================================================
-    window.shareMatch = function(matchId, title, entry, prize) {
-        const msg = `🎮 *${title}* এ Join করো!\n💰 Entry: ৳${entry} | 🏆 Prize: ৳${prize}\n🔗 ${window.location.href}`;
-        if (navigator.share) {
-            navigator.share({ title, text: msg, url: window.location.href });
-        } else {
-            navigator.clipboard.writeText(msg).then(() => showToast('Match details copied!', 'success'));
-        }
-    };
-
-    window.shareMatchTo = function(platform, title, entry, prize) {
-        const msg = encodeURIComponent(`🎮 *${title}* এ Join করো!\n💰 Entry: ৳${entry} | 🏆 Prize: ৳${prize}\n🔗 ${window.location.href}`);
-        if (platform === 'whatsapp') window.open(`https://wa.me/?text=${msg}`, '_blank');
-        else if (platform === 'telegram') window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${msg}`, '_blank');
-    };
-
-    // =====================================================
-    // ✅ REFERRAL - WhatsApp & Telegram share
-    // =====================================================
-    window.shareReferralTo = function(platform) {
-        const code = document.getElementById('refer-code-display')?.innerText || '';
-        const msg = encodeURIComponent(`🎯 WINNING BD তে Join করো!\n🎁 আমার Referral Code: *${code}* ব্যবহার করো এবং ৫ টাকা বোনাস পাও!\n🔗 ${window.location.href}`);
-        if (platform === 'whatsapp') window.open(`https://wa.me/?text=${msg}`, '_blank');
-        else if (platform === 'telegram') window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${msg}`, '_blank');
-    };
-
-    // =====================================================
-    // ✅ REFERRAL TRACKING - Firebase থেকে load
-    // =====================================================
-    function loadReferralStats(uid) {
-        onValue(ref(db, 'referrals/' + uid), (snap) => {
-            const data = snap.val() || {};
-            const friends = Object.values(data);
-            const total = friends.length;
-            const earned = total * 10;
-            const now = new Date();
-            const thisMonth = friends.filter(f => {
-                if (!f.joinedAt) return false;
-                const d = new Date(f.joinedAt);
-                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-            }).length;
-
-            document.getElementById('refer-total-count').innerText = total;
-            document.getElementById('refer-total-earned').innerText = '৳' + earned;
-            document.getElementById('refer-this-month').innerText = thisMonth;
-
-            // Weekly graph
-            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            const weeklyCounts = [0,0,0,0,0,0,0];
-            friends.forEach(f => {
-                if (!f.joinedAt) return;
-                const d = new Date(f.joinedAt);
-                const diff = Math.floor((now - d) / 86400000);
-                if (diff < 7) weeklyCounts[d.getDay()]++;
-            });
-            const maxCount = Math.max(...weeklyCounts, 1);
-            const rows = document.querySelectorAll('#refer-weekly-graph .refer-bar-row');
-            rows.forEach((row, i) => {
-                const dayIdx = (now.getDay() - 6 + i + 7) % 7;
-                const count = weeklyCounts[dayIdx];
-                const pct = Math.round((count / maxCount) * 100);
-                row.querySelector('.refer-bar-fill').style.width = pct + '%';
-                row.querySelector('.refer-bar-count').innerText = count;
-                row.querySelector('.refer-bar-label').innerText = days[dayIdx].substring(0,3);
-            });
-
-            // Friend list
-            const listEl = document.getElementById('refer-friend-list');
-            if (friends.length === 0) {
-                listEl.innerHTML = `
-                    <div class="empty-state" style="padding:30px;">
-                        <div class="empty-state-icon">👥</div>
-                        <h3>এখনো কাউকে রেফার করোনি</h3>
-                        <p>বন্ধুদের সাথে code শেয়ার করো!</p>
-                    </div>`;
-                return;
-            }
-            listEl.innerHTML = friends.map(f => {
-                const initial = (f.name || 'U')[0].toUpperCase();
-                const date = f.joinedAt ? new Date(f.joinedAt).toLocaleDateString('bn-BD') : '';
-                return `
-                    <div class="refer-friend-item">
-                        <div class="refer-friend-avatar">${initial}</div>
-                        <div>
-                            <div class="refer-friend-name">${f.name || 'Unknown User'}</div>
-                            <div class="refer-friend-date">${date}</div>
-                        </div>
-                        <div class="refer-friend-bonus">+৳10</div>
-                    </div>`;
-            }).join('');
-
-            // Nav badge update
-            updateNavBadge('nav-badge-notif', thisMonth);
-        });
-    }
-
-    // =====================================================
-    // ✅ NAV BADGE UPDATE
-    // =====================================================
-    function updateNavBadge(id, count) {
-        const badge = document.getElementById(id);
-        if (!badge) return;
-        if (count > 0) {
-            badge.innerText = count > 9 ? '9+' : count;
-            badge.classList.add('show');
-        } else {
-            badge.classList.remove('show');
-        }
-    }
-
-    // Watch notifications for badge
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            onValue(ref(db, 'notifications'), snap => {
-                const data = snap.val() || {};
-                const unread = Object.values(data).filter(n => n.active).length;
-                updateNavBadge('nav-badge-notif', unread);
-            });
-            onValue(ref(db, 'matches'), snap => {
-                const data = snap.val() || {};
-                const live = Object.values(data).filter(m => m.status === 'Ongoing').length;
-                updateNavBadge('nav-badge-matches', live);
-            });
-            // Load referral stats
-            loadReferralStats(user.uid);
-        }
-    });
-
-    // =====================================================
-    // ✅ AVATAR UPLOAD
-    // =====================================================
-    window.uploadAvatar = function(input) {
-        const file = input.files[0];
-        if (!file) return;
-        if (file.size > 2 * 1024 * 1024) {
-            showToast('ছবি ২MB এর বেশি হওয়া যাবে না', 'error');
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const base64 = e.target.result;
-            document.getElementById('profile-avatar').src = base64;
-            showToast('ছবি আপলোড হচ্ছে...', 'info');
-            if (currentUser) {
-                try {
-                    await update(ref(db, 'users/' + currentUser.uid), { avatar: base64 });
-                    showToast('প্রোফাইল ছবি সেভ হয়েছে ✅', 'success');
-                } catch(err) {
-                    showToast('সেভ ব্যর্থ হয়েছে', 'error');
-                }
-            }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // =====================================================
-    // ✅ SKELETON LOADER - smooth version
-    // =====================================================
-    window.showSkeletonLoaders = function(container, count = 3) {
-        if (!container) return;
-        container.innerHTML = Array(count).fill('').map(() => `
-            <div class="skeleton-card">
-                <div class="skeleton skeleton-img"></div>
-                <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
-                    <div class="skeleton skeleton-avatar"></div>
-                    <div style="flex:1;">
-                        <div class="skeleton skeleton-line medium"></div>
-                        <div class="skeleton skeleton-line short" style="margin-top:8px;"></div>
-                    </div>
-                </div>
-                <div class="skeleton skeleton-line full"></div>
-                <div class="skeleton skeleton-line medium" style="margin-top:8px;"></div>
-            </div>`).join('');
-    };
-
-    // =====================================================
-    // ✅ FCM PUSH NOTIFICATIONS
-    // =====================================================
-    window.requestNotifPermission = async function() {
-        try {
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                showToast('🔔 Notification চালু হয়েছে!', 'success');
-                dismissNotifBanner();
-                if (currentUser) {
-                    await update(ref(db, 'users/' + currentUser.uid), { notifEnabled: true });
-                }
-            } else {
-                showToast('Notification অনুমতি দেওয়া হয়নি', 'error');
-            }
-        } catch(err) {
-            showToast('Browser notification support নেই', 'error');
-        }
-    };
-
-    window.dismissNotifBanner = function() {
-        const b = document.getElementById('notif-permission-banner');
-        if (b) b.style.display = 'none';
-        localStorage.setItem('notif_banner_dismissed', '1');
-    };
-
-    function checkNotifPermission() {
-        if (!('Notification' in window)) return;
-        if (Notification.permission === 'default' && !localStorage.getItem('notif_banner_dismissed')) {
-            const banner = document.getElementById('notif-permission-banner');
-            if (banner) banner.style.display = 'flex';
-        }
-    }
-    setTimeout(checkNotifPermission, 3000);
-
-    // Local notification helper (foreground)
-    window.sendLocalNotif = function(title, body) {
-        if (Notification.permission === 'granted') {
-            new Notification(title, {
-                body,
-                icon: 'https://i.ibb.co.com/whcG0rC6/1770787659213-8d48fc16-a270-4efc-bbcd-e737bcbcd6c6.png'
-            });
-        }
-    };
-
-    // =====================================================
-    // ✅ OTP via Email (EmailJS - free service)
-    // =====================================================
-    let otpValue = '';
-    let otpTimer = null;
-
-    window.sendEmailOTP = async function(email) {
-        if (!email || !email.includes('@')) {
-            showToast('সঠিক email দিন', 'error');
-            return;
-        }
-        otpValue = Math.floor(100000 + Math.random() * 900000).toString();
-        showToast('OTP পাঠানো হচ্ছে...', 'info');
-        // EmailJS integration - emailjs.com এ account খুলে setup করো
-        // emailjs.send('SERVICE_ID', 'TEMPLATE_ID', { to_email: email, otp: otpValue })
-        // এখন demo mode:
-        console.log('OTP (demo):', otpValue); // Production এ remove করো
-        showOTPModal(email);
-    };
-
-    function showOTPModal(email) {
-        let modal = document.getElementById('otp-modal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'otp-modal';
-            modal.className = 'modal-overlay active';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3 style="font-weight:900;margin-bottom:10px;">📧 OTP Verification</h3>
-                    <p style="color:var(--text-light);font-size:0.85rem;margin-bottom:20px;">${email} এ OTP পাঠানো হয়েছে</p>
-                    <div class="otp-container">
-                        <input class="otp-input" maxlength="1" oninput="otpNext(this,0)" type="number">
-                        <input class="otp-input" maxlength="1" oninput="otpNext(this,1)" type="number">
-                        <input class="otp-input" maxlength="1" oninput="otpNext(this,2)" type="number">
-                        <input class="otp-input" maxlength="1" oninput="otpNext(this,3)" type="number">
-                        <input class="otp-input" maxlength="1" oninput="otpNext(this,4)" type="number">
-                        <input class="otp-input" maxlength="1" oninput="otpNext(this,5)" type="number">
-                    </div>
-                    <div class="otp-timer" id="otp-timer-display">⏱ 60 সেকেন্ড বাকি</div>
-                    <div class="otp-resend disabled" id="otp-resend-btn" onclick="resendOTP('${email}')">পুনরায় পাঠান</div>
-                    <button class="primary-btn" onclick="verifyOTP()" style="margin-top:15px;">✅ Verify করুন</button>
-                    <button onclick="document.getElementById('otp-modal').remove()" style="width:100%;padding:12px;margin-top:10px;background:none;border:none;color:var(--text-light);font-weight:700;cursor:pointer;">বাতিল</button>
-                </div>`;
-            document.body.appendChild(modal);
-        }
-        startOTPTimer();
-    }
-
-    function startOTPTimer() {
-        let secs = 60;
-        clearInterval(otpTimer);
-        otpTimer = setInterval(() => {
-            secs--;
-            const el = document.getElementById('otp-timer-display');
-            if (el) el.innerText = `⏱ ${secs} সেকেন্ড বাকি`;
-            if (secs <= 0) {
-                clearInterval(otpTimer);
-                if (el) el.innerText = 'সময় শেষ';
-                const resend = document.getElementById('otp-resend-btn');
-                if (resend) resend.classList.remove('disabled');
-            }
-        }, 1000);
-    }
-
-    window.otpNext = function(el, idx) {
-        el.value = el.value.slice(-1);
-        const inputs = document.querySelectorAll('.otp-input');
-        if (el.value && idx < 5) inputs[idx + 1]?.focus();
-    };
-
-    window.verifyOTP = function() {
-        const inputs = document.querySelectorAll('.otp-input');
-        const entered = Array.from(inputs).map(i => i.value).join('');
-        if (entered === otpValue) {
-            showToast('✅ OTP সফলভাবে যাচাই হয়েছে!', 'success');
-            document.getElementById('otp-modal')?.remove();
-            clearInterval(otpTimer);
-        } else {
-            showToast('❌ ভুল OTP! আবার চেষ্টা করুন', 'error');
-            document.querySelectorAll('.otp-input').forEach(i => { i.value = ''; i.style.boxShadow = 'var(--shadow-neumorphic-inset), 0 0 0 2px var(--danger)'; });
-        }
-    };
-
-    window.resendOTP = function(email) {
-        otpValue = Math.floor(100000 + Math.random() * 900000).toString();
-        console.log('New OTP (demo):', otpValue);
-        showToast('নতুন OTP পাঠানো হয়েছে', 'info');
-        document.getElementById('otp-resend-btn')?.classList.add('disabled');
-        startOTPTimer();
-    };
-
-    // =====================================================
-    // ✅ LIVE SCORE UPDATE SYSTEM
-    // =====================================================
-    function startLiveScoreListener(matchKey) {
-        onValue(ref(db, 'match_scores/' + matchKey), (snap) => {
-            const scores = snap.val();
-            if (!scores) return;
-            const scoreEl = document.getElementById('live-score-' + matchKey);
-            if (scoreEl) {
-                scoreEl.innerHTML = Object.entries(scores)
-                    .sort((a,b) => b[1].kills - a[1].kills)
-                    .slice(0, 5)
-                    .map(([uid, s], i) => `
-                        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--dark-shadow);">
-                            <span style="font-weight:900;color:var(--primary);width:20px;">#${i+1}</span>
-                            <span style="flex:1;font-weight:700;">${s.name || 'Player'}</span>
-                            <span style="font-weight:900;color:var(--success);">💀 ${s.kills || 0}</span>
-                        </div>`).join('');
-            }
-        });
-    }
-    window.startLiveScoreListener = startLiveScoreListener;
-
-    console.log('✅ All features loaded: Live Pulse, Search, Share, Avatar, Referral Graph, FCM, OTP, Live Score');
-
+    console.log('✅ Full app loaded with LUDO page transition loader & Dev Maim moved down (RGB removed)');
+</script>
 
 <!-- ========== ENSURE CATEGORY GRID 2 COLUMNS ========== -->
 <script>
