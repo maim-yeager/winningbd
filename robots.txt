@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://winningbd.vercel.app/sitemap.xml
