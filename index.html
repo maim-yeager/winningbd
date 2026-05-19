@@ -4366,113 +4366,87 @@ textarea,
     window.googleSignUp = window.googleSignIn; // Same flow for sign up
 
     // ========== SPLASH SCREEN CONTROLLER ==========
-    (function() {
-        // Splash screen dismiss after 3.5 seconds
-        const splashTimer = setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            if (splash) {
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    splashFinished = true;
-                }, 500);
-            }
-        }, 3500);
-
-        // Fallback: force hide splash after 10s if something went wrong
+    function hideSplashAndEnter() {
+        const splash = document.getElementById('splash-screen');
+        if (!splash || splash.style.display === 'none') return;
+        splash.style.opacity = '0';
         setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            if (splash && splash.style.display !== 'none') {
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    splashFinished = true;
-                }, 500);
-            }
-        }, 10000);
+            splash.style.display = 'none';
+            splashFinished = true;
+            // Always navigate to home first so main content is visible
+            const initialPage = getPageFromURL();
+            navigateTo(initialPage, null, true);
+        }, 500);
+    }
+
+    (function() {
+        setTimeout(hideSplashAndEnter, 3500);
+        // Fallback: force hide splash after 8s if something went wrong
+        setTimeout(hideSplashAndEnter, 8000);
     })();
 
-    // ========== AUTO REDIRECT - FIXED: SPLASH ALWAYS FIRST, THEN HOME OR LOGIN ==========
+    // ========== AUTO REDIRECT - SPLASH FIRST, THEN HOME + AUTH IF NEEDED ==========
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-            
-            // User is logged in -> after splash, show home and hide auth
-            const waitForSplash = setInterval(() => {
-                if (splashFinished) {
-                    clearInterval(waitForSplash);
-                    
-                    document.getElementById('auth-container').style.visibility = 'hidden'; // hide login screen
-                    document.getElementById('profile-login-btn').classList.add('hidden');
-                    document.getElementById('profile-logout-btn').classList.remove('hidden');
-                    
-                    // Load initial page from URL or default to home
-                    const initialPage = getPageFromURL();
-                    navigateTo(initialPage, null, true);
-                    
-                    // Load user data
-                    const userRef = ref(db, 'users/' + user.uid);
-                    onValue(userRef, (snapshot) => {
-                        const data = snapshot.val();
-                        if (data) {
-                            currentUserData = {
-                                id: user.uid,
-                                name: data.username || user.displayName,
-                                email: data.email,
-                                phone: data.phone,
-                                deposit: data.deposit || 0,
-                                winning: data.winning || 0
-                            };
-                            depositBal = data.deposit || 0;
-                            winningBal = data.winning || 0;
-                            
-                            document.getElementById('profile-name').innerText = currentUserData.name || 'User';
-                            document.getElementById('profile-email').innerText = currentUserData.email || '';
-                            // Load avatar if saved
-                            if (currentUserData.avatar) {
-                                document.getElementById('profile-avatar').src = currentUserData.avatar;
-                            }
-                            document.getElementById('profile-bal-dep').innerText = depositBal;
-                            document.getElementById('profile-bal-win').innerText = winningBal;
-                            document.getElementById('wallet-balance-display').innerText = depositBal + winningBal;
-                            document.getElementById('deposit-available-wallet').innerText = depositBal;
-                            document.getElementById('withdraw-available-wallet').innerText = winningBal;
-                            document.getElementById('refer-code-display').innerText = user.uid.substring(0, 6).toUpperCase();
-                            // Load referral tracking
-                            loadReferralStats(user.uid);
-                            // Load avatar if saved
-                            if (currentUserData && currentUserData.avatar) {
-                                document.getElementById('profile-avatar').src = currentUserData.avatar;
-                            }
+        const waitForSplash = setInterval(() => {
+            if (!splashFinished) return;
+            clearInterval(waitForSplash);
+
+            if (user) {
+                currentUser = user;
+                document.getElementById('auth-container').style.visibility = 'hidden';
+                document.getElementById('profile-login-btn').classList.add('hidden');
+                document.getElementById('profile-logout-btn').classList.remove('hidden');
+
+                // Load user data
+                const userRef = ref(db, 'users/' + user.uid);
+                onValue(userRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        currentUserData = {
+                            id: user.uid,
+                            name: data.username || user.displayName,
+                            email: data.email,
+                            phone: data.phone,
+                            deposit: data.deposit || 0,
+                            winning: data.winning || 0
+                        };
+                        depositBal = data.deposit || 0;
+                        winningBal = data.winning || 0;
+
+                        document.getElementById('profile-name').innerText = currentUserData.name || 'User';
+                        document.getElementById('profile-email').innerText = currentUserData.email || '';
+                        if (currentUserData.avatar) {
+                            document.getElementById('profile-avatar').src = currentUserData.avatar;
                         }
-                    });
-                }
-            }, 100);
-            
-        } else {
-            currentUser = null;
-            currentUserData = null;
-            depositBal = 0;
-            winningBal = 0;
-            
-            // No user -> after splash, show auth container
-            const waitForSplash = setInterval(() => {
-                if (splashFinished) {
-                    clearInterval(waitForSplash);
-                    
-                    document.getElementById('profile-name').innerText = 'Guest User';
-                    document.getElementById('profile-email').innerText = 'Please login to continue';
-                    document.getElementById('profile-bal-dep').innerText = '0';
-                    document.getElementById('profile-bal-win').innerText = '0';
-                    document.getElementById('profile-login-btn').classList.remove('hidden');
-                    document.getElementById('profile-logout-btn').classList.add('hidden');
-                    
-                    // Show authentication screen
-                    document.getElementById('auth-container').style.visibility = 'visible';
-                    switchAuthPage('login');
-                }
-            }, 100);
-        }
+                        document.getElementById('profile-bal-dep').innerText = depositBal;
+                        document.getElementById('profile-bal-win').innerText = winningBal;
+                        document.getElementById('wallet-balance-display').innerText = depositBal + winningBal;
+                        document.getElementById('deposit-available-wallet').innerText = depositBal;
+                        document.getElementById('withdraw-available-wallet').innerText = winningBal;
+                        document.getElementById('refer-code-display').innerText = user.uid.substring(0, 6).toUpperCase();
+                        loadReferralStats(user.uid);
+                        if (currentUserData && currentUserData.avatar) {
+                            document.getElementById('profile-avatar').src = currentUserData.avatar;
+                        }
+                    }
+                });
+            } else {
+                currentUser = null;
+                currentUserData = null;
+                depositBal = 0;
+                winningBal = 0;
+
+                document.getElementById('profile-name').innerText = 'Guest User';
+                document.getElementById('profile-email').innerText = 'Please login to continue';
+                document.getElementById('profile-bal-dep').innerText = '0';
+                document.getElementById('profile-bal-win').innerText = '0';
+                document.getElementById('profile-login-btn').classList.remove('hidden');
+                document.getElementById('profile-logout-btn').classList.add('hidden');
+
+                document.getElementById('auth-container').style.visibility = 'visible';
+                switchAuthPage('login');
+            }
+        }, 100);
     });
 
     // ========== NETWORK & OFFLINE HANDLER ==========
