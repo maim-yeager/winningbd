@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WINNING BD</title>
-    
+    <title>WINNING TOUR - Bangladesh Free Fire Tournament Platform</title>
+
+    <!-- Primary SEO -->
+    <meta name="description" content="WINNING TOUR is a Bangladesh Free Fire tournament platform where players can join esports events, custom matches, and gaming competitions online.">
+    <meta name="keywords" content="WINNING TOUR, winning tour bd, Free Fire Tournament Bangladesh, esports BD, custom room, gaming tournament, Free Fire BD">
+    <meta name="author" content="WINNING TOUR">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://winningbd.vercel.app">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="WINNING TOUR">
+    <meta property="og:description" content="Bangladesh Free Fire tournament platform">
+    <meta property="og:image" content="https://i.ibb.co.com/20tL5FJr/3b4d1b42-9957-4891-85bf-e07823b28171.png">
+    <meta property="og:url" content="https://winningbd.vercel.app">
+    <meta property="og:site_name" content="WINNING TOUR">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WINNING TOUR">
+    <meta name="twitter:description" content="Bangladesh Free Fire tournament platform">
+    <meta name="twitter:image" content="https://i.ibb.co.com/20tL5FJr/3b4d1b42-9957-4891-85bf-e07823b28171.png">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "WINNING TOUR",
+      "url": "https://winningbd.vercel.app",
+      "description": "Bangladesh Free Fire Tournament Platform - Join esports events, custom matches, and gaming competitions online.",
+      "logo": "https://i.ibb.co.com/20tL5FJr/3b4d1b42-9957-4891-85bf-e07823b28171.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "WINNING TOUR",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://i.ibb.co.com/20tL5FJr/3b4d1b42-9957-4891-85bf-e07823b28171.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://winningbd.vercel.app/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <!-- Security Meta Tags -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
@@ -32,7 +82,9 @@
         // তোমার actual domain এখানে দাও
         const ALLOWED_DOMAINS = [
             'winningbd.vercel.app',       // Vercel main domain
-              // local test
+            'www.winningbd.vercel.app',   // www version
+            'localhost',                  // local test
+            '127.0.0.1'                   // local test
             // Custom domain থাকলে এখানে যোগ করো, যেমন: 'winningbd.com'
         ];
         const currentHost = window.location.hostname.toLowerCase();
@@ -2874,9 +2926,9 @@ textarea,
 
 <!-- ========== SPLASH SCREEN (ALWAYS FIRST) =====
      Note: Dev Maim moved down and RGB removed as requested -->
-<div id="splash-screen">
+<div id="splash-screen" aria-label="WINNING TOUR Loading Screen">
     <div class="splash-logo-wrapper">
-        <img src="https://i.ibb.co.com/whcG0rC6/1770787659213-8d48fc16-a270-4efc-bbcd-e737bcbcd6c6.png" alt="WINNING BD Logo" class="splash-logo" id="splash-logo-img">
+        <img src="https://i.ibb.co.com/whcG0rC6/1770787659213-8d48fc16-a270-4efc-bbcd-e737bcbcd6c6.png" alt="WINNING TOUR - Bangladesh Free Fire Tournament Platform" class="splash-logo" id="splash-logo-img">
     </div>
     <h1 class="splash-title">WINNING TOUR</h1>
     <p class="splash-version">3.0</p>
@@ -2888,41 +2940,46 @@ textarea,
 <div id="toast-container"></div>
 
 <!-- ========== FLOATING ACTION BUTTONS ========== -->
-<div class="fab-whatsapp" onclick="window.open('https://wa.me/+8801833515655?text=Hello%20Maim vai%20Support%20lagbe🌸', '_blank')">
-    <i class="fab fa-whatsapp"></i>
+<div class="fab-whatsapp" onclick="window.open('https://wa.me/+8801833515655?text=Hello%20Maim vai%20Support%20lagbe🌸', '_blank')" aria-label="WhatsApp Support" role="button">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
 </div>
-<div class="fab-telegram" onclick="window.open('https://t.me/cr_maim', '_blank')">
-    <img src="https://img.icons8.com/?size=100&id=yjJvTQzQoKEy&format=png&color=000000" alt="Telegram">
+<div class="fab-telegram" onclick="window.open('https://t.me/cr_maim', '_blank')" aria-label="Telegram Support" role="button">
+    <img src="https://img.icons8.com/?size=100&id=yjJvTQzQoKEy&format=png&color=000000" alt="Telegram Support">
 </div>
 
 <!-- ========== MAIN CONTENT ========== -->
 <main id="main-content">
 
     <!-- ========== HOME SECTION ========== -->
-    <section id="tab-home-view" class="app-section">
-        <div class="app-title-container">
-            <span class="animated-app-title">⚡WINNING  TOUR</span>
-        </div>
-        <div class="hero-banner">
+    <section id="tab-home-view" class="app-section" aria-label="Home">
+        <header class="app-title-container" role="banner">
+            <h1 class="animated-app-title" aria-label="WINNING TOUR - Bangladesh Free Fire Tournament Platform">⚡WINNING  TOUR</h1>
+        </header>
+        <div class="hero-banner" role="region" aria-label="Featured Tournaments">
             <div class="slider-container">
                 <div id="banner-slider-wrapper" class="slider-wrapper"></div>
             </div>
-            <div id="slider-dots" class="slider-dots"></div>
+            <div id="slider-dots" class="slider-dots" aria-label="Slide navigation"></div>
         </div>
         
-        <div class="home-content-wrapper">
-            <!-- FIXED MARQUEE - RIGHT TO LEFT, INFINITE, SMOOTH, DYNAMIC -->
-            <div class="marquee-container">
-                <i class="fas fa-bullhorn marquee-icon"></i>
+        <main class="home-content-wrapper">
+            <!-- MARQUEE -->
+            <div class="marquee-container" role="marquee" aria-live="polite">
+                <i class="fas fa-bullhorn marquee-icon" aria-hidden="true"></i>
                 <div class="marquee-wrapper">
-                    <span id="dynamic-notice" class="marquee-content">Welcome to WINNING BD - Bangladesh's Largest Tournament Platform</span>
+                    <span id="dynamic-notice" class="marquee-content">Welcome to WINNING TOUR - Bangladesh Free Fire Tournament &amp; Esports Platform</span>
                 </div>
             </div>
             
-            <div class="category-title">FREE FIRE & OTHERS</div>
+            <!-- SEO visible keywords - visually styled as subtitle -->
+            <p class="seo-tagline" style="text-align:center;font-size:0.7rem;color:var(--text-light);font-weight:700;letter-spacing:0.5px;padding:2px 20px 8px;margin:0;">
+                🇧🇩 Bangladesh Free Fire Tournament · Esports Platform · Custom Room
+            </p>
             
-            <div id="dynamic-category-list" class="category-grid"></div>
-        </div>
+            <h2 class="category-title" style="font-size:inherit;font-weight:inherit;">FREE FIRE &amp; OTHERS</h2>
+            
+            <div id="dynamic-category-list" class="category-grid" role="list" aria-label="Tournament Categories"></div>
+        </main>
     </section>
 
     <!-- ========== MY MATCHES SECTION ========== -->
@@ -4251,65 +4308,110 @@ textarea,
         });
     };
 
-    // ========== GOOGLE SIGN-IN ==========
+    // ========== GOOGLE SIGN-IN - FIXED ==========
     const googleProvider = new GoogleAuthProvider();
+    googleProvider.addScope('email');
+    googleProvider.addScope('profile');
     googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+    async function saveGoogleUserToDb(user) {
+        const userSnap = await get(ref(db, 'users/' + user.uid));
+        if (!userSnap.exists()) {
+            await set(ref(db, 'users/' + user.uid), {
+                username: user.displayName || 'User',
+                email: user.email || '',
+                phone: '',
+                deposit: 0,
+                winning: 0,
+                provider: 'google',
+                avatar: user.photoURL || '',
+                created: serverTimestamp()
+            });
+            showToast('স্বাগতম! একাউন্ট তৈরি হয়েছে ✅', 'success');
+        } else {
+            showToast('সফলভাবে লগইন হয়েছে ✅', 'success');
+        }
+    }
 
     window.googleSignIn = async function() {
         const btn = document.getElementById('google-login-btn');
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Google দিয়ে লগইন হচ্ছে...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> অপেক্ষা করুন...';
         }
         try {
+            // Try popup first
             const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-            // Check if user already exists in DB
-            const userSnap = await get(ref(db, 'users/' + user.uid));
-            if (!userSnap.exists()) {
-                // New Google user - create profile
-                await set(ref(db, 'users/' + user.uid), {
-                    username: user.displayName || 'User',
-                    email: user.email,
-                    phone: '',
-                    deposit: 0,
-                    winning: 0,
-                    provider: 'google',
-                    created: serverTimestamp()
-                });
-                showToast(`স্বাগতম ${user.displayName}! একাউন্ট তৈরি হয়েছে।`, 'success');
-            } else {
-                showToast(`স্বাগতম ${user.displayName}!`, 'success');
+            await saveGoogleUserToDb(result.user);
+            // Avatar from Google
+            if (result.user.photoURL) {
+                document.getElementById('profile-avatar').src = result.user.photoURL;
             }
             setTimeout(() => {
                 document.getElementById('auth-container').style.visibility = 'hidden';
-            }, 1000);
+            }, 800);
         } catch (error) {
-            let msg = 'Google লগইন ব্যর্থ হয়েছে';
-            if (error.code === 'auth/popup-closed-by-user') msg = 'লগইন উইন্ডো বন্ধ করা হয়েছে';
-            if (error.code === 'auth/popup-blocked') msg = 'Popup blocked! Browser settings থেকে allow করুন';
-            showToast(msg, 'error');
+            if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+                // Fallback to redirect if popup blocked
+                showToast('Popup blocked! Redirect এ চেষ্টা হচ্ছে...', 'info');
+                try {
+                    const { signInWithRedirect, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+                    await signInWithRedirect(auth, googleProvider);
+                } catch(e) {
+                    showToast('Google লগইন ব্যর্থ। ম্যানুয়াল লগইন করুন।', 'error');
+                }
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                showToast('লগইন উইন্ডো বন্ধ করা হয়েছে', 'info');
+            } else if (error.code === 'auth/unauthorized-domain') {
+                showToast('Domain authorized নয়। Firebase Console এ domain যোগ করুন।', 'error');
+            } else {
+                showToast('Google লগইন ব্যর্থ: ' + (error.message || ''), 'error');
+            }
         } finally {
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G"> Google দিয়ে Sign In';
+                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Google দিয়ে Sign In';
             }
         }
     };
 
-    window.googleSignUp = window.googleSignIn; // Same flow for sign up
+    // Check redirect result on page load (for popup-blocked fallback)
+    (async function checkRedirectResult() {
+        try {
+            const { getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+            const result = await getRedirectResult(auth);
+            if (result && result.user) {
+                await saveGoogleUserToDb(result.user);
+            }
+        } catch(e) { /* no redirect result */ }
+    })();
 
-    // ========== SPLASH SCREEN CONTROLLER ==========
-    window.onload = function() {
-        // স্প্ল্যাশ স্ক্রিন 3.5 সেকেন্ড দেখাবে
+    window.googleSignUp = window.googleSignIn;
+
+    // ========== SPLASH SCREEN CONTROLLER - FIXED ==========
+    function hideSplash() {
+        const splash = document.getElementById('splash-screen');
+        if (!splash) { splashFinished = true; return; }
+        splash.style.transition = 'opacity 0.5s ease';
+        splash.style.opacity = '0';
         setTimeout(() => {
-            document.getElementById('splash-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                splashFinished = true;  // this triggers the auth state handler
-            }, 500);
-        }, 3500);
-    };
+            splash.style.display = 'none';
+            splashFinished = true;
+        }, 500);
+    }
+
+    // Hide splash after 3.5s — use both DOMContentLoaded and load fallback
+    if (document.readyState === 'complete') {
+        setTimeout(hideSplash, 3500);
+    } else {
+        window.addEventListener('load', function() {
+            setTimeout(hideSplash, 3500);
+        });
+        // Fallback: force hide after 6s even if load never fires
+        setTimeout(function() {
+            if (!splashFinished) hideSplash();
+        }, 6000);
+    }
 
     // ========== AUTO REDIRECT - FIXED: SPLASH ALWAYS FIRST, THEN HOME OR LOGIN ==========
     onAuthStateChanged(auth, (user) => {
