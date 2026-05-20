@@ -11,6 +11,7 @@
     <meta name="author" content="WINNING TOUR">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#000000">
+        <meta name="google-site-verification" content="swNYPGQ61KNIKoQlPxQ1TsEVSjK93EKK513LmWz8zAM" />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://winningbd.vercel.app">
@@ -82,7 +83,9 @@
         // তোমার actual domain এখানে দাও
         const ALLOWED_DOMAINS = [
             'winningbd.vercel.app',       // Vercel main domain
-            'https://winningbd.vercel.app',          // local test
+            'www.winningbd.vercel.app',   // www version
+            'localhost',                  // local test
+            '127.0.0.1'                   // local test
             // Custom domain থাকলে এখানে যোগ করো, যেমন: 'winningbd.com'
         ];
         const currentHost = window.location.hostname.toLowerCase();
@@ -673,7 +676,7 @@ textarea,
     width: 100%;
     height: 100%;
     background: #e0e5ec;
-    z-index: 9999;
+    z-index: 99999; /* splash above everything including auth */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2197,7 +2200,7 @@ textarea,
             justify-content: center;
             padding: var(--space-xl);
             overflow-y: auto;
-            visibility: hidden;
+            visibility: visible; /* visible by default - hidden after login */
         }
         .auth-page {
             width: 100%;
@@ -4090,7 +4093,10 @@ textarea,
 
     // ========== AUTHENTICATION FUNCTIONS - FIXED ==========
     window.showAuthScreen = function() {
-        document.getElementById('auth-container').style.visibility = 'visible';
+        const ac = document.getElementById('auth-container');
+        ac.style.visibility = 'visible';
+        ac.style.display = 'flex';
+        ac.style.pointerEvents = '';
         switchAuthPage('login');
     };
 
@@ -4170,8 +4176,11 @@ textarea,
             await signInWithEmailAndPassword(auth, email, password);
             showToast('লগইন সফল হয়েছে!', 'success');
             setTimeout(() => {
-                document.getElementById('auth-container').style.visibility = 'hidden';
-            }, 1000);
+                const ac = document.getElementById('auth-container');
+                ac.style.visibility = 'hidden';
+                ac.style.display = 'none';
+                ac.style.pointerEvents = 'none';
+            }, 800);
         } catch (error) {
             let errorMessage = '';
             switch(error.code) {
@@ -4267,7 +4276,10 @@ textarea,
             
             showToast(`রেজিস্ট্রেশন সফল! আপনি ${bonus} টাকা বোনাস পেয়েছেন`, 'success');
             setTimeout(() => {
-                document.getElementById('auth-container').style.visibility = 'hidden';
+                const ac2 = document.getElementById('auth-container');
+                ac2.style.visibility = 'hidden';
+                ac2.style.display = 'none';
+                ac2.style.pointerEvents = 'none';
             }, 1500);
         } catch (error) {
             let errorMessage = '';
@@ -4299,7 +4311,10 @@ textarea,
     window.logout = function() {
         signOut(auth).then(() => {
             showToast('লগআউট সফল হয়েছে', 'success');
-            document.getElementById('auth-container').style.visibility = 'visible';
+            const authCont = document.getElementById('auth-container');
+            authCont.style.visibility = 'visible';
+            authCont.style.display = 'flex';
+            authCont.style.pointerEvents = '';
             switchAuthPage('login');
         }).catch((error) => {
             showToast(error.message, 'error');
@@ -4331,58 +4346,63 @@ textarea,
         }
     }
 
+    // ===== GOOGLE SIGN-IN - FULLY FIXED =====
+    // onAuthStateChanged handles all UI after login — googleSignIn only triggers auth
     window.googleSignIn = async function() {
         const btn = document.getElementById('google-login-btn');
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> অপেক্ষা করুন...';
-        }
+        const btn2 = document.querySelectorAll('.google-signin-btn');
+        btn2.forEach(b => { b.disabled = true; b.style.opacity = '0.7'; });
+        if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> অপেক্ষা করুন...';
+
         try {
-            // Try popup first
             const result = await signInWithPopup(auth, googleProvider);
-            await saveGoogleUserToDb(result.user);
-            // Avatar from Google
-            if (result.user.photoURL) {
-                document.getElementById('profile-avatar').src = result.user.photoURL;
+            const user = result.user;
+            showToast('✅ Google লগইন সফল!', 'success');
+            // Save to DB if new user (onAuthStateChanged will handle UI)
+            const snap = await get(ref(db, 'users/' + user.uid));
+            if (!snap.exists()) {
+                await set(ref(db, 'users/' + user.uid), {
+                    username: user.displayName || 'User',
+                    email: user.email || '',
+                    phone: '',
+                    deposit: 0,
+                    winning: 0,
+                    provider: 'google',
+                    avatar: user.photoURL || '',
+                    created: serverTimestamp()
+                });
             }
-            setTimeout(() => {
-                document.getElementById('auth-container').style.visibility = 'hidden';
-            }, 800);
+            // Force UI update immediately - do not wait for onAuthStateChanged
+            const ac = document.getElementById('auth-container');
+            ac.style.visibility = 'hidden';
+            ac.style.display = 'none';
+            ac.style.pointerEvents = 'none';
+            document.getElementById('profile-login-btn')?.classList.add('hidden');
+            document.getElementById('profile-logout-btn')?.classList.remove('hidden');
+            if (user.photoURL) {
+                document.getElementById('profile-avatar').src = user.photoURL;
+            }
+            navigateTo('home', null, true);
+
         } catch (error) {
-            if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
-                // Fallback to redirect if popup blocked
-                showToast('Popup blocked! Redirect এ চেষ্টা হচ্ছে...', 'info');
-                try {
-                    const { signInWithRedirect, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
-                    await signInWithRedirect(auth, googleProvider);
-                } catch(e) {
-                    showToast('Google লগইন ব্যর্থ। ম্যানুয়াল লগইন করুন।', 'error');
-                }
+            let msg = 'Google লগইন ব্যর্থ হয়েছে';
+            if (error.code === 'auth/popup-blocked') {
+                msg = 'Popup block হয়েছে — browser এ popup allow করুন';
             } else if (error.code === 'auth/popup-closed-by-user') {
-                showToast('লগইন উইন্ডো বন্ধ করা হয়েছে', 'info');
+                msg = 'লগইন cancel করা হয়েছে';
             } else if (error.code === 'auth/unauthorized-domain') {
-                showToast('Domain authorized নয়। Firebase Console এ domain যোগ করুন।', 'error');
+                msg = '⚠️ Domain authorized নয়! Firebase Console এ winningbd.vercel.app যোগ করুন';
+            } else if (error.code === 'auth/network-request-failed') {
+                msg = 'নেটওয়ার্ক সমস্যা। আবার চেষ্টা করুন।';
             } else {
-                showToast('Google লগইন ব্যর্থ: ' + (error.message || ''), 'error');
+                msg = 'Error: ' + (error.code || error.message);
             }
+            showToast(msg, 'error');
         } finally {
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Google দিয়ে Sign In';
-            }
+            btn2.forEach(b => { b.disabled = false; b.style.opacity = ''; });
+            if (btn) btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Google দিয়ে Sign In';
         }
     };
-
-    // Check redirect result on page load (for popup-blocked fallback)
-    (async function checkRedirectResult() {
-        try {
-            const { getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
-            const result = await getRedirectResult(auth);
-            if (result && result.user) {
-                await saveGoogleUserToDb(result.user);
-            }
-        } catch(e) { /* no redirect result */ }
-    })();
 
     window.googleSignUp = window.googleSignIn;
 
@@ -4411,86 +4431,120 @@ textarea,
         }, 6000);
     }
 
-    // ========== AUTO REDIRECT - FIXED: SPLASH ALWAYS FIRST, THEN HOME OR LOGIN ==========
+    // ========== AUTH STATE HANDLER - FULLY FIXED ==========
+    let authHandled = false; // prevent double-run
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUser = user;
+            authHandled = false;
             
-            // User is logged in -> after splash, show home and hide auth
-            const waitForSplash = setInterval(() => {
-                if (splashFinished) {
-                    clearInterval(waitForSplash);
-                    
-                    document.getElementById('auth-container').style.visibility = 'hidden'; // hide login screen
-                    document.getElementById('profile-login-btn').classList.add('hidden');
-                    document.getElementById('profile-logout-btn').classList.remove('hidden');
-                    
-                    // Load initial page from URL or default to home
-                    const initialPage = getPageFromURL();
-                    navigateTo(initialPage, null, true);
-                    
-                    // Load user data
-                    const userRef = ref(db, 'users/' + user.uid);
-                    onValue(userRef, (snapshot) => {
-                        const data = snapshot.val();
-                        if (data) {
-                            currentUserData = {
-                                id: user.uid,
-                                name: data.username || user.displayName,
-                                email: data.email,
-                                phone: data.phone,
-                                deposit: data.deposit || 0,
-                                winning: data.winning || 0
-                            };
-                            depositBal = data.deposit || 0;
-                            winningBal = data.winning || 0;
-                            
-                            document.getElementById('profile-name').innerText = currentUserData.name || 'User';
-                            document.getElementById('profile-email').innerText = currentUserData.email || '';
-                            // Load avatar if saved
-                            if (currentUserData.avatar) {
-                                document.getElementById('profile-avatar').src = currentUserData.avatar;
-                            }
-                            document.getElementById('profile-bal-dep').innerText = depositBal;
-                            document.getElementById('profile-bal-win').innerText = winningBal;
-                            document.getElementById('wallet-balance-display').innerText = depositBal + winningBal;
-                            document.getElementById('deposit-available-wallet').innerText = depositBal;
-                            document.getElementById('withdraw-available-wallet').innerText = winningBal;
-                            document.getElementById('refer-code-display').innerText = user.uid.substring(0, 6).toUpperCase();
-                            // Load referral tracking
-                            loadReferralStats(user.uid);
-                            // Load avatar if saved
-                            if (currentUserData && currentUserData.avatar) {
-                                document.getElementById('profile-avatar').src = currentUserData.avatar;
-                            }
-                        }
-                    });
+            // Helper: show home UI after login
+            const showHomeUI = () => {
+                if (authHandled) return;
+                authHandled = true;
+
+                const authCont = document.getElementById('auth-container');
+                if (authCont) {
+                    authCont.style.visibility = 'hidden';
+                    authCont.style.display = 'none';
+                    authCont.style.pointerEvents = 'none';
                 }
-            }, 100);
-            
+                document.getElementById('profile-login-btn')?.classList.add('hidden');
+                document.getElementById('profile-logout-btn')?.classList.remove('hidden');
+
+                const initialPage = getPageFromURL();
+                navigateTo(initialPage || 'home', null, true);
+
+                // Load user data from Firebase
+                const userRef = ref(db, 'users/' + user.uid);
+                onValue(userRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        currentUserData = {
+                            id: user.uid,
+                            name: data.username || user.displayName || 'User',
+                            email: data.email || user.email || '',
+                            phone: data.phone || '',
+                            deposit: data.deposit || 0,
+                            winning: data.winning || 0
+                        };
+                        depositBal = data.deposit || 0;
+                        winningBal = data.winning || 0;
+
+                        document.getElementById('profile-name').innerText = currentUserData.name;
+                        document.getElementById('profile-email').innerText = currentUserData.email;
+
+                        // Avatar: Firebase saved > Google photo
+                        const avatarEl = document.getElementById('profile-avatar');
+                        if (data.avatar) {
+                            avatarEl.src = data.avatar;
+                        } else if (user.photoURL) {
+                            avatarEl.src = user.photoURL;
+                        }
+
+                        document.getElementById('profile-bal-dep').innerText = depositBal;
+                        document.getElementById('profile-bal-win').innerText = winningBal;
+                        document.getElementById('wallet-balance-display').innerText = depositBal + winningBal;
+                        document.getElementById('deposit-available-wallet').innerText = depositBal;
+                        document.getElementById('withdraw-available-wallet').innerText = winningBal;
+                        document.getElementById('refer-code-display').innerText = user.uid.substring(0, 6).toUpperCase();
+                        loadReferralStats(user.uid);
+                    } else {
+                        // Google user with no DB entry yet - show display name
+                        document.getElementById('profile-name').innerText = user.displayName || 'User';
+                        document.getElementById('profile-email').innerText = user.email || '';
+                        if (user.photoURL) {
+                            document.getElementById('profile-avatar').src = user.photoURL;
+                        }
+                    }
+                });
+            };
+
+            // If splash already done, show immediately; else wait
+            if (splashFinished) {
+                showHomeUI();
+            } else {
+                const splashWait = setInterval(() => {
+                    if (splashFinished) {
+                        clearInterval(splashWait);
+                        showHomeUI();
+                    }
+                }, 100);
+            }
+
         } else {
             currentUser = null;
             currentUserData = null;
             depositBal = 0;
             winningBal = 0;
-            
-            // No user -> after splash, show auth container
-            const waitForSplash = setInterval(() => {
-                if (splashFinished) {
-                    clearInterval(waitForSplash);
-                    
-                    document.getElementById('profile-name').innerText = 'Guest User';
-                    document.getElementById('profile-email').innerText = 'Please login to continue';
-                    document.getElementById('profile-bal-dep').innerText = '0';
-                    document.getElementById('profile-bal-win').innerText = '0';
-                    document.getElementById('profile-login-btn').classList.remove('hidden');
-                    document.getElementById('profile-logout-btn').classList.add('hidden');
-                    
-                    // Show authentication screen
-                    document.getElementById('auth-container').style.visibility = 'visible';
-                    switchAuthPage('login');
+            authHandled = false;
+
+            const showLoginUI = () => {
+                document.getElementById('profile-name').innerText = 'Guest User';
+                document.getElementById('profile-email').innerText = 'Please login to continue';
+                document.getElementById('profile-bal-dep').innerText = '0';
+                document.getElementById('profile-bal-win').innerText = '0';
+                document.getElementById('profile-login-btn')?.classList.remove('hidden');
+                document.getElementById('profile-logout-btn')?.classList.add('hidden');
+                const authCont = document.getElementById('auth-container');
+                if (authCont) {
+                    authCont.style.visibility = 'visible';
+                    authCont.style.display = 'flex';
+                    authCont.style.pointerEvents = '';
                 }
-            }, 100);
+                switchAuthPage('login');
+            };
+
+            if (splashFinished) {
+                showLoginUI();
+            } else {
+                const splashWait = setInterval(() => {
+                    if (splashFinished) {
+                        clearInterval(splashWait);
+                        showLoginUI();
+                    }
+                }, 100);
+            }
         }
     });
 
@@ -4772,7 +4826,6 @@ textarea,
                 <div class="mc-btn-row">
                     ${actions}
                 </div>
-                <!-- Share Buttons -->
                 <div class="share-btn-row" style="margin-top:8px;">
                     <button class="share-btn whatsapp" onclick="shareMatchTo('whatsapp','${(match.title||'Match').replace(/'/g,"\\'")}',${match.entry||0},${match.total_prize||0})">
                         <i class="fab fa-whatsapp"></i> শেয়ার
@@ -5775,18 +5828,17 @@ setTimeout(() => {
 
     console.log('✅ All features loaded: Live Pulse, Search, Share, Avatar, Referral Graph, FCM, OTP, Live Score');
 
-
-<!-- ========== ENSURE CATEGORY GRID 2 COLUMNS ========== -->
-<script>
+    // Ensure category grid 2 columns
     (function() {
         const style = document.createElement('style');
-        style.innerHTML = `.category-grid { grid-template-columns: repeat(2, 1fr) !important; }`;
+        style.innerHTML = '.category-grid { grid-template-columns: repeat(2, 1fr) !important; }';
         document.head.appendChild(style);
     })();
+
 </script>
 
-<!-- ========== ADDITIONAL SECURITY: ANTI-SCREENSHOT / WATERMARK ========== -->
 <script>
+// Additional security: anti-screenshot / watermark
 (function() {
     // Screenshot detection (limited browser support)
     document.addEventListener('visibilitychange', function() {
