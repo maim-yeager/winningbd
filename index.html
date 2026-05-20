@@ -3888,6 +3888,8 @@ textarea,
                 document.querySelectorAll('.tab-item').forEach((el, idx) => {
                     el.classList.toggle('active', idx === 0);
                 });
+                // Force re-render categories from cached data
+                renderCategoryGrid();
             } else if (section === 'matches') {
                 document.getElementById('tab-mymatches-view').classList.add('active');
                 document.querySelectorAll('.tab-item').forEach((el, idx) => {
@@ -4541,6 +4543,7 @@ textarea,
         } else if (authReady) {
             // User was previously logged in but is now logged out (e.g. token expired)
             clearUserState();
+            authReady = true; // Keep guard enabled: authReady && !currentUser = redirect
             if (splashFinished) {
                 showLoginUI();
             } else {
@@ -5158,29 +5161,35 @@ textarea,
         });
     }
 
+    // ========== REUSABLE CATEGORY RENDERER ==========
+    function renderCategoryGrid() {
+        const grid = document.getElementById('dynamic-category-list');
+        if (!grid || !categories || Object.keys(categories).length === 0) return;
+        grid.innerHTML = '';
+        Object.entries(categories).forEach(([key, cat]) => {
+            const matchCount = rawMatches.filter(m => m.categoryId === key && m.status !== 'Finished').length;
+            grid.innerHTML += `
+                <div class="cat-card" onclick="openCategory('${key}')">
+                    <div style="position:relative;">
+                        <img src="${cat.img || 'https://i.ibb.co.com/whcG0rC6/1770787659213-8d48fc16-a270-4efc-bbcd-e737bcbcd6c6.png'}" class="cat-card-img fade-image" data-cache-id="cat_${key}" alt="${cat.name}">
+                        
+                    </div>
+                    <div class="cat-card-info">
+                        <div class="cat-card-title">${cat.name || 'Category'}</div>
+                        <div class="cat-card-count" id="count-${key}">${matchCount} matches found</div>
+                    </div>
+                </div>
+            `;
+        });
+        setTimeout(() => { if (window.imageCache) window.imageCache.cacheAllImages(); }, 500);
+    }
+
     // ========== FIREBASE LISTENERS ==========
     onValue(ref(db, 'categories'), (snapshot) => {
         const data = snapshot.val();
         if (data) {
             categories = data;
-            const grid = document.getElementById('dynamic-category-list');
-            grid.innerHTML = '';
-            Object.entries(data).forEach(([key, cat]) => {
-                const matchCount = rawMatches.filter(m => m.categoryId === key && m.status !== 'Finished').length;
-                grid.innerHTML += `
-                    <div class="cat-card" onclick="openCategory('${key}')">
-                        <div style="position:relative;">
-                            <img src="${cat.img || 'https://i.ibb.co.com/whcG0rC6/1770787659213-8d48fc16-a270-4efc-bbcd-e737bcbcd6c6.png'}" class="cat-card-img fade-image" data-cache-id="cat_${key}" alt="${cat.name}">
-                            
-                        </div>
-                        <div class="cat-card-info">
-                            <div class="cat-card-title">${cat.name || 'Category'}</div>
-                            <div class="cat-card-count" id="count-${key}">${matchCount} matches found</div>
-                        </div>
-                    </div>
-                `;
-            });
-            setTimeout(() => { if (window.imageCache) window.imageCache.cacheAllImages(); }, 500);
+            renderCategoryGrid();
         }
     });
 
