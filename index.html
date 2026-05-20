@@ -3722,7 +3722,6 @@ textarea,
     
     // ========== GLOBAL VARIABLES ==========
     let splashFinished = false;
-    let authReady = false;
     let userDataUnsub = null;
     let currentUser = null;
     let currentUserData = null;
@@ -3849,17 +3848,6 @@ textarea,
 
     // Unified navigation function
     function navigateTo(section, subPage = null, addToHistory = true) {
-        // Auth guard: if auth is resolved and user is not logged in, show login
-        if (authReady && !currentUser) {
-            const authCont = document.getElementById('auth-container');
-            if (authCont) {
-                authCont.style.visibility = 'visible';
-                authCont.style.display = 'flex';
-                authCont.style.pointerEvents = '';
-            }
-            switchAuthPage('login');
-            return;
-        }
         // Hide all sections first
         document.querySelectorAll('.app-section').forEach(el => el.classList.remove('active'));
         
@@ -4414,70 +4402,14 @@ textarea,
         }, 6000);
     }
 
-    // ========== SHARED LOGIN UI - used by auth handler ==========
-    function showLoginUI() {
-        document.getElementById('profile-name').innerText = 'Guest User';
-        document.getElementById('profile-email').innerText = 'Please login to continue';
-        document.getElementById('profile-bal-dep').innerText = '0';
-        document.getElementById('profile-bal-win').innerText = '0';
-        document.getElementById('profile-login-btn')?.classList.remove('hidden');
-        document.getElementById('profile-logout-btn')?.classList.add('hidden');
-        const authCont = document.getElementById('auth-container');
-        if (authCont) {
-            authCont.style.visibility = 'visible';
-            authCont.style.display = 'flex';
-            authCont.style.pointerEvents = '';
-        }
-        switchAuthPage('login');
-    }
-
-    function clearUserState() {
-        currentUser = null;
-        currentUserData = null;
-        authReady = false;
-        depositBal = 0;
-        winningBal = 0;
-        if (userDataUnsub) {
-            userDataUnsub();
-            userDataUnsub = null;
-        }
-        if (historyUnsub) {
-            historyUnsub();
-            historyUnsub = null;
-        }
-        if (notifUnsub) {
-            notifUnsub();
-            notifUnsub = null;
-        }
-        if (referralUnsub) {
-            referralUnsub();
-            referralUnsub = null;
-        }
-        if (notifBadgeUnsub) {
-            notifBadgeUnsub();
-            notifBadgeUnsub = null;
-        }
-    }
-
-    // ========== AUTH STATE HANDLER - PERSISTENT & FLICKER-FREE ==========
+    // ========== AUTH STATE HANDLER - SIMPLIFIED (app.html style) ==========
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUser = user;
-            authReady = true;
-
-            // Detach previous user data listener to prevent duplicates
-            if (userDataUnsub) {
-                userDataUnsub();
-                userDataUnsub = null;
-            }
 
             const showHomeUI = () => {
                 const authCont = document.getElementById('auth-container');
-                if (authCont) {
-                    authCont.style.visibility = 'hidden';
-                    authCont.style.display = 'none';
-                    authCont.style.pointerEvents = 'none';
-                }
+                if (authCont) authCont.style.visibility = 'hidden';
                 document.getElementById('profile-login-btn')?.classList.add('hidden');
                 document.getElementById('profile-logout-btn')?.classList.remove('hidden');
 
@@ -4486,7 +4418,12 @@ textarea,
                     navigateTo(initialPage || 'home', null, true);
                 }
 
-                // Attach user data realtime listener (only one at a time)
+                // Detach previous user data listener to prevent duplicates
+                if (userDataUnsub) {
+                    userDataUnsub();
+                    userDataUnsub = null;
+                }
+
                 const userRef = ref(db, 'users/' + user.uid);
                 userDataUnsub = onValue(userRef, (snapshot) => {
                     const data = snapshot.val();
@@ -4506,11 +4443,8 @@ textarea,
                         document.getElementById('profile-email').innerText = currentUserData.email;
 
                         const avatarEl = document.getElementById('profile-avatar');
-                        if (data.avatar) {
-                            avatarEl.src = data.avatar;
-                        } else if (user.photoURL) {
-                            avatarEl.src = user.photoURL;
-                        }
+                        if (data.avatar) avatarEl.src = data.avatar;
+                        else if (user.photoURL) avatarEl.src = user.photoURL;
 
                         document.getElementById('profile-bal-dep').innerText = depositBal;
                         document.getElementById('profile-bal-win').innerText = winningBal;
@@ -4522,9 +4456,7 @@ textarea,
                     } else {
                         document.getElementById('profile-name').innerText = user.displayName || 'User';
                         document.getElementById('profile-email').innerText = user.email || '';
-                        if (user.photoURL) {
-                            document.getElementById('profile-avatar').src = user.photoURL;
-                        }
+                        if (user.photoURL) document.getElementById('profile-avatar').src = user.photoURL;
                     }
                 });
             };
@@ -4540,40 +4472,45 @@ textarea,
                 }, 100);
             }
 
-        } else if (authReady) {
-            // User was previously logged in but is now logged out (e.g. token expired)
-            clearUserState();
-            authReady = true; // Keep guard enabled: authReady && !currentUser = redirect
+        } else {
+            currentUser = null;
+            currentUserData = null;
+            depositBal = 0;
+            winningBal = 0;
+
+            // Clean up user data listener
+            if (userDataUnsub) {
+                userDataUnsub();
+                userDataUnsub = null;
+            }
+
+            const showGuestUI = () => {
+                document.getElementById('profile-name').innerText = 'Guest User';
+                document.getElementById('profile-email').innerText = 'Please login to continue';
+                document.getElementById('profile-bal-dep').innerText = '0';
+                document.getElementById('profile-bal-win').innerText = '0';
+                document.getElementById('profile-login-btn')?.classList.remove('hidden');
+                document.getElementById('profile-logout-btn')?.classList.add('hidden');
+
+                const authCont = document.getElementById('auth-container');
+                if (authCont) {
+                    authCont.style.visibility = 'visible';
+                    authCont.style.display = 'flex';
+                    authCont.style.pointerEvents = '';
+                }
+                switchAuthPage('login');
+            };
+
             if (splashFinished) {
-                showLoginUI();
+                showGuestUI();
             } else {
                 const splashWait = setInterval(() => {
                     if (splashFinished) {
                         clearInterval(splashWait);
-                        showLoginUI();
+                        showGuestUI();
                     }
                 }, 100);
             }
-
-        } else {
-            // First null fire — Firebase is checking persisted session.
-            // If no user is restored within 2s, session doesn't exist.
-            setTimeout(() => {
-                if (!authReady) {
-                    clearUserState();
-                    authReady = true; // Enable navigation guard
-                    if (splashFinished) {
-                        showLoginUI();
-                    } else {
-                        const splashWait = setInterval(() => {
-                            if (splashFinished) {
-                                clearInterval(splashWait);
-                                showLoginUI();
-                            }
-                        }, 100);
-                    }
-                }
-            }, 2000);
         }
     });
 
