@@ -3677,7 +3677,7 @@ textarea,
     // =====================================================
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, onValue, push, update, get, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile as firebaseUpdateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile as firebaseUpdateProfile, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     // =====================================================
     // FIREBASE CONFIG - XOR obfuscated (Domain locked above)
@@ -3715,8 +3715,15 @@ textarea,
     const db = getDatabase(app);
     const auth = getAuth(app);
     
+    // Enable persistent auth state across tabs and browser restarts
+    setPersistence(auth, browserLocalPersistence).catch((err) => {
+        console.warn('Auth persistence set failed:', err);
+    });
+    
     // ========== GLOBAL VARIABLES ==========
     let splashFinished = false;
+    let authReady = false;
+    let userDataUnsub = null;
     let currentUser = null;
     let currentUserData = null;
     let depositBal = 0;
@@ -3842,6 +3849,17 @@ textarea,
 
     // Unified navigation function
     function navigateTo(section, subPage = null, addToHistory = true) {
+        // Auth guard: if auth is resolved and user is not logged in, show login
+        if (authReady && !currentUser) {
+            const authCont = document.getElementById('auth-container');
+            if (authCont) {
+                authCont.style.visibility = 'visible';
+                authCont.style.display = 'flex';
+                authCont.style.pointerEvents = '';
+            }
+            switchAuthPage('login');
+            return;
+        }
         // Hide all sections first
         document.querySelectorAll('.app-section').forEach(el => el.classList.remove('active'));
         
@@ -4173,12 +4191,7 @@ textarea,
         try {
             await signInWithEmailAndPassword(auth, email, password);
             showToast('লগইন সফল হয়েছে!', 'success');
-            setTimeout(() => {
-                const ac = document.getElementById('auth-container');
-                ac.style.visibility = 'hidden';
-                ac.style.display = 'none';
-                ac.style.pointerEvents = 'none';
-            }, 800);
+            // onAuthStateChanged will handle UI transition
         } catch (error) {
             let errorMessage = '';
             switch(error.code) {
@@ -4273,12 +4286,7 @@ textarea,
             });
             
             showToast(`রেজিস্ট্রেশন সফল! আপনি ${bonus} টাকা বোনাস পেয়েছেন`, 'success');
-            setTimeout(() => {
-                const ac2 = document.getElementById('auth-container');
-                ac2.style.visibility = 'hidden';
-                ac2.style.display = 'none';
-                ac2.style.pointerEvents = 'none';
-            }, 1500);
+            // onAuthStateChanged will handle UI transition
         } catch (error) {
             let errorMessage = '';
             switch(error.code) {
@@ -4306,17 +4314,15 @@ textarea,
         }
     };
 
-    window.logout = function() {
-        signOut(auth).then(() => {
+    window.logout = async function() {
+        try {
+            await signOut(auth);
+            // onAuthStateChanged handles all state cleanup & UI
+            // (detaches listeners, clears state, shows login form)
             showToast('লগআউট সফল হয়েছে', 'success');
-            const authCont = document.getElementById('auth-container');
-            authCont.style.visibility = 'visible';
-            authCont.style.display = 'flex';
-            authCont.style.pointerEvents = '';
-            switchAuthPage('login');
-        }).catch((error) => {
+        } catch (error) {
             showToast(error.message, 'error');
-        });
+        }
     };
 
     // ========== GOOGLE SIGN-IN - FIXED ==========
@@ -4344,8 +4350,8 @@ textarea,
         }
     }
 
-    // ===== GOOGLE SIGN-IN - FULLY FIXED =====
-    // onAuthStateChanged handles all UI after login — googleSignIn only triggers auth
+    // ===== GOOGLE SIGN-IN - FIXED =====
+    // onAuthStateChanged handles all UI — googleSignIn only triggers auth + DB save
     window.googleSignIn = async function() {
         const btn = document.getElementById('google-login-btn');
         const btn2 = document.querySelectorAll('.google-signin-btn');
@@ -4355,33 +4361,10 @@ textarea,
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
+            // Save to DB if new user
+            await saveGoogleUserToDb(user);
             showToast('✅ Google লগইন সফল!', 'success');
-            // Save to DB if new user (onAuthStateChanged will handle UI)
-            const snap = await get(ref(db, 'users/' + user.uid));
-            if (!snap.exists()) {
-                await set(ref(db, 'users/' + user.uid), {
-                    username: user.displayName || 'User',
-                    email: user.email || '',
-                    phone: '',
-                    deposit: 0,
-                    winning: 0,
-                    provider: 'google',
-                    avatar: user.photoURL || '',
-                    created: serverTimestamp()
-                });
-            }
-            // Force UI update immediately - do not wait for onAuthStateChanged
-            const ac = document.getElementById('auth-container');
-            ac.style.visibility = 'hidden';
-            ac.style.display = 'none';
-            ac.style.pointerEvents = 'none';
-            document.getElementById('profile-login-btn')?.classList.add('hidden');
-            document.getElementById('profile-logout-btn')?.classList.remove('hidden');
-            if (user.photoURL) {
-                document.getElementById('profile-avatar').src = user.photoURL;
-            }
-            navigateTo('home', null, true);
-
+            // onAuthStateChanged will handle UI transition
         } catch (error) {
             let msg = 'Google লগইন ব্যর্থ হয়েছে';
             if (error.code === 'auth/popup-blocked') {
@@ -4389,7 +4372,7 @@ textarea,
             } else if (error.code === 'auth/popup-closed-by-user') {
                 msg = 'লগইন cancel করা হয়েছে';
             } else if (error.code === 'auth/unauthorized-domain') {
-                msg = '⚠️ Domain authorized নয়! Firebase Console এ winningbd.vercel.app যোগ করুন';
+                msg = '⚠️ Domain authorized নয়! Firebase Console এ আপনার domain যোগ করুন';
             } else if (error.code === 'auth/network-request-failed') {
                 msg = 'নেটওয়ার্ক সমস্যা। আবার চেষ্টা করুন।';
             } else {
@@ -4429,18 +4412,48 @@ textarea,
         }, 6000);
     }
 
-    // ========== AUTH STATE HANDLER - FULLY FIXED ==========
-    let authHandled = false; // prevent double-run
+    // ========== SHARED LOGIN UI - used by auth handler ==========
+    function showLoginUI() {
+        document.getElementById('profile-name').innerText = 'Guest User';
+        document.getElementById('profile-email').innerText = 'Please login to continue';
+        document.getElementById('profile-bal-dep').innerText = '0';
+        document.getElementById('profile-bal-win').innerText = '0';
+        document.getElementById('profile-login-btn')?.classList.remove('hidden');
+        document.getElementById('profile-logout-btn')?.classList.add('hidden');
+        const authCont = document.getElementById('auth-container');
+        if (authCont) {
+            authCont.style.visibility = 'visible';
+            authCont.style.display = 'flex';
+            authCont.style.pointerEvents = '';
+        }
+        switchAuthPage('login');
+    }
+
+    function clearUserState() {
+        currentUser = null;
+        currentUserData = null;
+        authReady = false;
+        depositBal = 0;
+        winningBal = 0;
+        if (userDataUnsub) {
+            userDataUnsub();
+            userDataUnsub = null;
+        }
+    }
+
+    // ========== AUTH STATE HANDLER - PERSISTENT & FLICKER-FREE ==========
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUser = user;
-            authHandled = false;
-            
-            // Helper: show home UI after login
-            const showHomeUI = () => {
-                if (authHandled) return;
-                authHandled = true;
+            authReady = true;
 
+            // Detach previous user data listener to prevent duplicates
+            if (userDataUnsub) {
+                userDataUnsub();
+                userDataUnsub = null;
+            }
+
+            const showHomeUI = () => {
                 const authCont = document.getElementById('auth-container');
                 if (authCont) {
                     authCont.style.visibility = 'hidden';
@@ -4451,11 +4464,13 @@ textarea,
                 document.getElementById('profile-logout-btn')?.classList.remove('hidden');
 
                 const initialPage = getPageFromURL();
-                navigateTo(initialPage || 'home', null, true);
+                if (!document.querySelector('.app-section.active')) {
+                    navigateTo(initialPage || 'home', null, true);
+                }
 
-                // Load user data from Firebase
+                // Attach user data realtime listener (only one at a time)
                 const userRef = ref(db, 'users/' + user.uid);
-                onValue(userRef, (snapshot) => {
+                userDataUnsub = onValue(userRef, (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
                         currentUserData = {
@@ -4472,7 +4487,6 @@ textarea,
                         document.getElementById('profile-name').innerText = currentUserData.name;
                         document.getElementById('profile-email').innerText = currentUserData.email;
 
-                        // Avatar: Firebase saved > Google photo
                         const avatarEl = document.getElementById('profile-avatar');
                         if (data.avatar) {
                             avatarEl.src = data.avatar;
@@ -4488,7 +4502,6 @@ textarea,
                         document.getElementById('refer-code-display').innerText = user.uid.substring(0, 6).toUpperCase();
                         loadReferralStats(user.uid);
                     } else {
-                        // Google user with no DB entry yet - show display name
                         document.getElementById('profile-name').innerText = user.displayName || 'User';
                         document.getElementById('profile-email').innerText = user.email || '';
                         if (user.photoURL) {
@@ -4498,7 +4511,6 @@ textarea,
                 });
             };
 
-            // If splash already done, show immediately; else wait
             if (splashFinished) {
                 showHomeUI();
             } else {
@@ -4510,29 +4522,9 @@ textarea,
                 }, 100);
             }
 
-        } else {
-            currentUser = null;
-            currentUserData = null;
-            depositBal = 0;
-            winningBal = 0;
-            authHandled = false;
-
-            const showLoginUI = () => {
-                document.getElementById('profile-name').innerText = 'Guest User';
-                document.getElementById('profile-email').innerText = 'Please login to continue';
-                document.getElementById('profile-bal-dep').innerText = '0';
-                document.getElementById('profile-bal-win').innerText = '0';
-                document.getElementById('profile-login-btn')?.classList.remove('hidden');
-                document.getElementById('profile-logout-btn')?.classList.add('hidden');
-                const authCont = document.getElementById('auth-container');
-                if (authCont) {
-                    authCont.style.visibility = 'visible';
-                    authCont.style.display = 'flex';
-                    authCont.style.pointerEvents = '';
-                }
-                switchAuthPage('login');
-            };
-
+        } else if (authReady) {
+            // User was previously logged in but is now logged out (e.g. token expired)
+            clearUserState();
             if (splashFinished) {
                 showLoginUI();
             } else {
@@ -4543,6 +4535,25 @@ textarea,
                     }
                 }, 100);
             }
+
+        } else {
+            // First null fire — Firebase is checking persisted session.
+            // If no user is restored within 2s, session doesn't exist.
+            setTimeout(() => {
+                if (!authReady) {
+                    clearUserState();
+                    if (splashFinished) {
+                        showLoginUI();
+                    } else {
+                        const splashWait = setInterval(() => {
+                            if (splashFinished) {
+                                clearInterval(splashWait);
+                                showLoginUI();
+                            }
+                        }, 100);
+                    }
+                }
+            }, 2000);
         }
     });
 
