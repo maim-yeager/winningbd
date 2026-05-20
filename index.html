@@ -3697,14 +3697,14 @@ textarea,
     };
 
     const firebaseConfig = {
-        apiKey: "AIzaSyAnNn4WX7P0EmaOEiMdnlY0RpPWg8iHcZs",
-        authDomain: "winning-bd-5ff58.firebaseapp.com",
-        databaseURL: "https://winning-bd-5ff58-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "winning-bd-5ff58",
-        storageBucket: "winning-bd-5ff58.firebasestorage.app",
-        messagingSenderId: "995814592519",
-        appId: "1:995814592519:web:2786354292240a6195daa2",
-        measurementId: "G-527HS1HP2Z"
+        apiKey: "AIzaSyCEmkD0u1ffyhajbH0t5Yea6qiTOBLnlTk",
+        authDomain: "new-tournament-54705.firebaseapp.com",
+        databaseURL: "https://new-tournament-54705-default-rtdb.firebaseio.com",
+        projectId: "new-tournament-54705",
+        storageBucket: "new-tournament-54705.firebasestorage.app",
+        messagingSenderId: "409263106809",
+        appId: "1:409263106809:web:7666f816a9264845ec1028",
+        measurementId: "G-HS0XR5BJ9V"
     };
     // NOTE: Firebase config এর true protection Firebase Console এ করতে হবে:
     // 1. Firebase Console > Authentication > Authorized domains এ শুধু তোমার domain add করো
@@ -4439,6 +4439,22 @@ textarea,
             userDataUnsub();
             userDataUnsub = null;
         }
+        if (historyUnsub) {
+            historyUnsub();
+            historyUnsub = null;
+        }
+        if (notifUnsub) {
+            notifUnsub();
+            notifUnsub = null;
+        }
+        if (referralUnsub) {
+            referralUnsub();
+            referralUnsub = null;
+        }
+        if (notifBadgeUnsub) {
+            notifBadgeUnsub();
+            notifBadgeUnsub = null;
+        }
     }
 
     // ========== AUTH STATE HANDLER - PERSISTENT & FLICKER-FREE ==========
@@ -4542,6 +4558,7 @@ textarea,
             setTimeout(() => {
                 if (!authReady) {
                     clearUserState();
+                    authReady = true; // Enable navigation guard
                     if (splashFinished) {
                         showLoginUI();
                     } else {
@@ -5067,13 +5084,19 @@ textarea,
         container.innerHTML = finishedMatches.map(match => createMatchCardHTML(match, 'result')).join('');
     }
 
+    let historyUnsub = null;
     function loadHistory() {
         if (!currentUser) {
             document.getElementById('history-list').innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-light); font-weight: 700;">Please login to view transactions</div>';
             return;
         }
+        // Detach previous listener to prevent duplicates
+        if (historyUnsub) {
+            historyUnsub();
+            historyUnsub = null;
+        }
         const historyRef = ref(db, 'transactions/' + currentUser.uid);
-        onValue(historyRef, (snapshot) => {
+        historyUnsub = onValue(historyRef, (snapshot) => {
             const container = document.getElementById('history-list');
             const data = snapshot.val();
             if (!data) {
@@ -5100,21 +5123,26 @@ textarea,
                 `;
             });
             container.innerHTML = html;
-        }, { onlyOnce: false }); // Changed to false to keep listening for updates
+        });
     }
 
+    let notifUnsub = null;
     function loadNotifications() {
+        // Detach previous listener to prevent duplicates
+        if (notifUnsub) {
+            notifUnsub();
+            notifUnsub = null;
+        }
         const notifRef = ref(db, 'notifications');
-        onValue(notifRef, (snapshot) => {
+        notifUnsub = onValue(notifRef, (snapshot) => {
             const container = document.getElementById('notif-list-container');
             const data = snapshot.val();
             if (!data) {
                 container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-light); font-weight: 700;">No notifications</div>';
                 return;
             }
-            let html = '';
             const notifications = Object.values(data).reverse();
-            html = notifications.map(n => `
+            const html = notifications.map(n => `
                 <div style="background: var(--bg-primary); border-radius: var(--radius-md); padding: 20px; margin-bottom: 15px; box-shadow: var(--shadow-neumorphic-sm);">
                     <div style="font-weight: 900; margin-bottom: 10px;">${n.title || 'Notification'}</div>
                     <div style="color: var(--text-medium);">${n.body || ''}</div>
@@ -5124,6 +5152,9 @@ textarea,
             container.innerHTML = html;
             document.getElementById('menu-notif-badge').innerText = notifications.length;
             document.getElementById('menu-notif-badge').style.display = notifications.length ? 'inline-block' : 'none';
+            // Update nav badge with active count
+            const unread = Object.values(data).filter(n => n.active).length;
+            updateNavBadge('nav-badge-notif', unread);
         });
     }
 
@@ -5171,6 +5202,9 @@ textarea,
         }
         loadMyMatches();
         loadResults();
+        // Update nav badge with live/ongoing match count
+        const liveCount = rawMatches.filter(m => m.status === 'Ongoing').length;
+        updateNavBadge('nav-badge-matches', liveCount);
     });
 
     onValue(ref(db, 'match_participants'), (snapshot) => {
@@ -5530,8 +5564,14 @@ setTimeout(() => {
     // =====================================================
     // ✅ REFERRAL TRACKING - Firebase থেকে load
     // =====================================================
+    let referralUnsub = null;
     function loadReferralStats(uid) {
-        onValue(ref(db, 'referrals/' + uid), (snap) => {
+        // Detach previous listener to prevent duplicates
+        if (referralUnsub) {
+            referralUnsub();
+            referralUnsub = null;
+        }
+        referralUnsub = onValue(ref(db, 'referrals/' + uid), (snap) => {
             const data = snap.val() || {};
             const friends = Object.values(data);
             const total = friends.length;
@@ -5611,21 +5651,21 @@ setTimeout(() => {
         }
     }
 
-    // Watch notifications for badge
+    // Permanent badge listeners (only active when logged in, properly cleaned up)
+    let notifBadgeUnsub = null;
     onAuthStateChanged(auth, user => {
+        // Detach previous badge listeners when auth state changes
+        if (notifBadgeUnsub) {
+            notifBadgeUnsub();
+            notifBadgeUnsub = null;
+        }
         if (user) {
-            onValue(ref(db, 'notifications'), snap => {
+            loadReferralStats(user.uid);
+            notifBadgeUnsub = onValue(ref(db, 'notifications'), snap => {
                 const data = snap.val() || {};
                 const unread = Object.values(data).filter(n => n.active).length;
                 updateNavBadge('nav-badge-notif', unread);
             });
-            onValue(ref(db, 'matches'), snap => {
-                const data = snap.val() || {};
-                const live = Object.values(data).filter(m => m.status === 'Ongoing').length;
-                updateNavBadge('nav-badge-matches', live);
-            });
-            // Load referral stats
-            loadReferralStats(user.uid);
         }
     });
 
